@@ -1,0 +1,22 @@
+ADD OL16568759W; Why Nations Fail; Daron Acemoglu; 2012
+ADD OL2619508W; The Inner Game of Tennis; W. Timothy Gallwey; 1834
+ADD OL17112978W; The Knowledge; Lewis Dartnell; 2014
+ADD OL1968368W; The 48 Laws of Power; Robert Greene; 1998
+ADD OL17828326W; Evicted; Matthew Desmond; 2016
+ADD OL25282892W; Library; Arthur der Weduwen; 2021
+ADD OL17606421W; Cataloging the world; Alex Wright; 2014
+ADD OL514629W; Surely You're Joking, Mr. Feynma"; Richard Phillips Feynman; 1984
+ADD OL38499W; The Diamond Age; Neal Stephenson; 1995
+ADD OL3525828W; The anatomy of racial inequality; Glenn C. Loury; 2002
+ADD OL107928W; The consolations of philosophy; Alain De Botton; 2000
+ADD OL1086528W; Essais; Michel de Montaigne; 1600
+ADD OL2018966W; Nonviolent Communication; Marshall B. Rosenberg; 1999
+ADD OL15162501W; Mandarin Chinese; Lexus (Firm); 1999
+ADD OL8396705W; The Secret of Apollo; Stephen B. Johnson; 2002
+ADD OL6225613W; The Mastery and Uses of Fire in Antiquity; J. E. Rehder; 2000
+ADD OL716850W; Gödel, Escher, Bach; Douglas R. Hofstadter; 1979
+ADD OL17357767W; Algorithms to Live By; Brian Christian; 2016
+CHECK_OUT XX17357767X;
+CHECK_IN OL17357767W;
+SEARCH OL17606421W;
+SEARCH OL16568759W;
