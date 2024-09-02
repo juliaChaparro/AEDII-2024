@@ -85,7 +85,7 @@ void remover_final_lse(t_lse* lse){
     while(lse->prim->prox != NULL){
         aux = lse->prim->prox;
     }
-
+    
     aux->prox=NULL;
     free(lse->ult);
 
@@ -96,8 +96,16 @@ void remover_final_lse(t_lse* lse){
 
 
 int acessar_lse(t_lse* lse,int pos){
-
-
+    
+    t_lse* nou,aux;
+    
+    while(aux && aux->carga != NULL){
+        aux = aux->prox;
+    }
+    if(nou){
+        nou= aux;
+    }
+    return nou;
 }
 
 
