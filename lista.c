@@ -80,8 +80,19 @@ void remover_inicio_lse(t_lse* lse){
 
 
 void remover_final_lse(t_lse* lse){
+    t_elementos_lse* aux;
 
+    while(lse->prim->prox != NULL){
+        aux = lse->prim->prox;
+    }
+
+    aux->prox=NULL;
+    free(lse->ult);
+
+    lse->ult = aux;  
+     
 }
+
 
 
 int acessar_lse(t_lse* lse,int pos){
