@@ -1,14 +1,15 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "assert.h"
+#include"lista_neutra.h"
 
 typedef struct elem_lse t_elementos_lse;
 
-typedef struct {
+struct lse{
     t_elementos_lse* prim;
     t_elementos_lse* ult;
     int tamanho;
-}t_lse;
+};
 
 
 struct elem_lse{
@@ -108,7 +109,7 @@ void* remover_conteudo_lse(t_lse*lse,int chave){
     assert(lse->prim!=NULL);
     void* carga=NULL;
     t_elementos_lse* ant=NULL;
-    t_elementos_lse*cam = lse->prim;
+    t_elementos_lse* cam = lse->prim;
 //to do
     while((cam!=NULL)&&(cam->carga_util!=chave)){
         ant = cam;
@@ -141,7 +142,7 @@ void* remover_inicio_lse(t_lse* lse){
     assert(lse->ult!=NULL);
     
     t_elementos_lse* seg = lse->prim->prox;
-    int carga = lse->prim->carga_util;
+    void* carga = lse->prim->carga_util;
     free(lse->prim);
     lse->prim=seg;
     lse->tamanho--;
@@ -155,7 +156,7 @@ void* remover_inicio_lse(t_lse* lse){
 
 void* remover_final_lse(t_lse* lse){
     assert(lse->prim!=NULL);
-    int carga;
+    void* carga;
     if(lse->prim==lse->ult){
         carga = lse->prim->carga_util;
         free(lse->prim);
@@ -177,7 +178,7 @@ void* remover_final_lse(t_lse* lse){
 
 
 
-void* acessar_lse(t_lse* lse,void* pos){
+void* acessar_lse(t_lse* lse,int pos){
 
     assert(pos>=1&&pos<=lse->tamanho);
     t_elementos_lse* cam =lse->prim;

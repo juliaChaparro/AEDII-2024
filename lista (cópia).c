@@ -12,11 +12,11 @@ typedef struct {
 
 
 struct elem_lse{
-    void* carga_util;
+    int carga_util;
     t_elementos_lse* prox;
 };
 
-t_elementos_lse* criar_elem_lse(void* carga){
+t_elementos_lse* criar_elem_lse(int carga){
     t_elementos_lse* novo= malloc(sizeof(t_elementos_lse));
     assert(novo!=NULL);
     novo->carga_util= carga;
@@ -39,7 +39,7 @@ t_lse* criar_lse(){
 
 }
 
-void inserir_inicio_lse(t_lse* lse, void* carga){
+void inserir_inicio_lse(t_lse* lse, int carga){
     t_elementos_lse *novo = criar_elem_lse(carga);
     novo->prox = lse->prim;
     lse->prim = novo;
@@ -51,7 +51,7 @@ void inserir_inicio_lse(t_lse* lse, void* carga){
 }
 
 
-void inserir_final_lse(t_lse* lse,void* carga){
+void inserir_final_lse(t_lse* lse,int carga){
     t_elementos_lse *novo = criar_elem_lse(carga);
     if (lse->prim==NULL){
         lse->prim= novo;
@@ -65,7 +65,7 @@ void inserir_final_lse(t_lse* lse,void* carga){
 }
 
 
-void inserir_conteudo_lse(t_lse* lse, void* carga){
+void inserir_conteudo_lse(t_lse* lse, int carga){
     t_elementos_lse* novo = criar_elem_lse(carga);
     t_elementos_lse* ant=NULL;
     t_elementos_lse* cam =  lse->prim;
@@ -90,10 +90,10 @@ void inserir_conteudo_lse(t_lse* lse, void* carga){
 }
 
 
-void* acessar_conteudo_lse(t_lse* lse,void* chave){
-    void* carga=NULL;
+int acessar_conteudo_lse(t_lse* lse,int chave){
+    int carga=0;
     t_elementos_lse* cam = lse->prim;
-//TO DO
+
     while((cam!=NULL)&&(cam->carga_util!=chave)){
         cam=cam->prox;
 
@@ -104,12 +104,12 @@ void* acessar_conteudo_lse(t_lse* lse,void* chave){
 
 
 }
-void* remover_conteudo_lse(t_lse*lse,int chave){
+int remover_conteudo_lse(t_lse*lse,int chave){
     assert(lse->prim!=NULL);
-    void* carga=NULL;
+    int carga=0;
     t_elementos_lse* ant=NULL;
     t_elementos_lse*cam = lse->prim;
-//to do
+
     while((cam!=NULL)&&(cam->carga_util!=chave)){
         ant = cam;
         cam = cam->prox;
@@ -137,7 +137,7 @@ void* remover_conteudo_lse(t_lse*lse,int chave){
 }
 
 
-void* remover_inicio_lse(t_lse* lse){
+int remover_inicio_lse(t_lse* lse){
     assert(lse->ult!=NULL);
     
     t_elementos_lse* seg = lse->prim->prox;
@@ -153,7 +153,7 @@ void* remover_inicio_lse(t_lse* lse){
 
 
 
-void* remover_final_lse(t_lse* lse){
+int remover_final_lse(t_lse* lse){
     assert(lse->prim!=NULL);
     int carga;
     if(lse->prim==lse->ult){
@@ -177,7 +177,7 @@ void* remover_final_lse(t_lse* lse){
 
 
 
-void* acessar_lse(t_lse* lse,void* pos){
+int acessar_lse(t_lse* lse,int pos){
 
     assert(pos>=1&&pos<=lse->tamanho);
     t_elementos_lse* cam =lse->prim;
