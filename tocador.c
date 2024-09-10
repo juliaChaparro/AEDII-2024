@@ -9,13 +9,17 @@ typedef struct musica{
     char nome[60];
     char genero[40];
     int duracao;
+    int favorita;
+    int nro_reproducao;
 }t_musica;
 
-t_musica* criar_musica(char nome[], char genero[], int duracao){
+t_musica* criar_musica(char nome[], char genero[], int duracao, int favorita, int nro_reproducao){
     t_musica* nova = malloc(sizeof(t_musica));
     strcpy(nova->nome, nome);
     strcpy(nova->genero, genero);
     nova->duracao = duracao;
+    nova->favorita = favorita;
+    nova->nro_reproducao = nro_reproducao;
 
     return nova;
 }
@@ -25,6 +29,14 @@ void imprimir_musica(t_musica* m){
     int seg = m->duracao%60;
 
     printf("%s(%s) %02d:%02d\n", m->nome, m->genero, min, seg);
+}
+
+int comparar_musica(t_musica* m1, t_musica* m2){
+    return strcmp(m1->nome, m2->nome);
+}
+
+int comparar_musica_repr(t_musica* m1, t_musica* m2){
+    return (m1->nro_reproducao - m2->nro_reproducao);
 }
 
 void destroy_musica(t_musica* m){
@@ -43,10 +55,10 @@ typedef struct tocador{
 t_tocador* criar_tocador(int lim_mais_tocadas){
     t_tocador *t = malloc(sizeof(t_tocador));
     t->lim_mais_tocadas = lim_mais_tocadas;
-    t->colecao = criar_lse( imprimir_musica );
-    t->favoritas = criar_lse( imprimir_musica );
-    t->ultimas_tocadas = criar_lse( imprimir_musica);
-    t->mais_tocadas = criar_lse( imprimir_musica );
+    t->colecao = criar_lse( imprimir_musica, comparar_musica );
+    t->favoritas = criar_lse( imprimir_musica, comparar_musica );
+    t->ultimas_tocadas = criar_lse( imprimir_musica, NULL);
+    t->mais_tocadas = criar_lse( imprimir_musica, comparar_musica_repr );
 
     return t;
 }
@@ -69,6 +81,8 @@ void ligar_tocador(t_tocador* tocador){
     char genero[40];
     int duracao;
     char separador[3];
+    int favorito;
+    int nro_reproducao;
 
     for(int i=1;i<=3;i++){
         scanf("%[^;]s",nome);
@@ -76,9 +90,16 @@ void ligar_tocador(t_tocador* tocador){
         scanf("%[^;]s", genero);
         scanf("%s ",separador);
         scanf("%d", &duracao);
+        scanf("%d", &favorito);
+        scanf("%d", &nro_reproducao);
 
-        t_musica* nova = criar_musica(nome, genero, duracao);
-        inserir_inicio_lse(tocador->colecao, nova);
+        t_musica* nova = criar_musica(nome, genero, duracao, favorito, nro_reproducao);
+        inserir_conteudo_lse(tocador->colecao, nova);
+        if (nova->favorita){
+            inserir_inicio_lse(tocador->favoritas, nova);
+        }
+        inserir_conteudo_lse(tocador->mais_tocadas, nova);
+
         //imprimir_musica(nova);
 
     }

@@ -9,6 +9,7 @@ struct lse{
     t_elemento_lse* ult;
     int tamanho;
     t_imprimir_lse impressora;
+    t_comparar_lse comparador;
 };
 
 struct elem_lse{
@@ -24,13 +25,15 @@ t_elemento_lse* criar_elem_lse(void* carga){
     return novo; 
 }
 
-t_lse* criar_lse( t_imprimir_lse impressora ){
+t_lse* criar_lse( t_imprimir_lse impressora, t_comparar_lse comparador ){
     t_lse* nova = malloc(sizeof(t_lse));
     assert(nova!=NULL);
     nova->prim = NULL;
     nova->ult = NULL;
     nova->tamanho =0;
     nova->impressora = impressora;
+    nova->comparador = comparador;
+    
     return nova;
 }
 /// @brief destroy uma lista vazia
@@ -68,7 +71,7 @@ void inserir_conteudo_lse(t_lse* lse, void* carga){
     t_elemento_lse* ant=NULL;
     t_elemento_lse* cam = lse->prim;
     /// 
-    while((cam!=NULL) && (cam->carga_util < carga)){
+    while((cam!=NULL) && (lse->comparador(cam->carga_util, carga) <= 0) ){
         ant = cam;
         cam = cam->prox;
     }
@@ -131,7 +134,7 @@ void* remover_conteudo_lse(t_lse* lse, void* chave){
     void* carga = NULL;
     t_elemento_lse* ant = NULL;
     t_elemento_lse* cam = lse->prim;
-    while((cam!=NULL) && (cam->carga_util!=chave) ){
+    while((cam!=NULL) && (lse->comparador(cam->carga_util,chave)!=0) ){
         ant = cam;
         cam = cam->prox;
     }
@@ -170,7 +173,7 @@ void* acessar_lse(t_lse* lse, int pos){
 void* acessar_conteudo_lse(t_lse* lse, void* chave){
     void* carga=NULL;
     t_elemento_lse* cam = lse->prim;
-    while( (cam!=NULL) && (cam->carga_util != chave)){
+    while( (cam!=NULL) && (lse->comparador(cam->carga_util, chave)!=0) ){
         cam = cam->prox;
     }
     if(cam!=NULL){
