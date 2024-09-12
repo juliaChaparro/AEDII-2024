@@ -71,11 +71,17 @@ void inserir_conteudo_lse(t_lse* lse, void* carga){
     t_elemento_lse* ant=NULL;
     t_elemento_lse* cam = lse->prim;
     /// 
+
+    
     while((cam!=NULL) && (lse->comparador(cam->carga_util, carga) <= 0) ){
         ant = cam;
         cam = cam->prox;
     }
-    if (cam == lse->prim){ //inicio da lista 
+    if(lse->prim==NULL){
+        lse->ult = novo;
+        lse->prim = novo;
+    }
+    else if (cam == lse->prim){ //inicio da lista 
         novo->prox = lse->prim;
         lse->prim = novo;
     }else if(cam == NULL){

@@ -8,10 +8,14 @@ void inserir_final_lse(t_lse* lse, void* carga);
 void inserir_conteudo_lse(t_lse* lse, void* carga);
 void* remover_inicio_lse(t_lse* lse);
 void* remover_final_lse(t_lse* lse);
+
 void* remover_conteudo_lse(t_lse* lse, void* chave);
 void* acessar_lse(t_lse* lse, int pos);
+
 void* acessar_conteudo_lse(t_lse* lse, void* chave);
 
+
 void imprimir_lse(t_lse* lse);
+
 void destroy_lse(t_lse* lse);
 
