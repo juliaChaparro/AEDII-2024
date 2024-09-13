@@ -14,8 +14,15 @@ void* acessar_lse(t_lse* lse, int pos);
 
 void* acessar_conteudo_lse(t_lse* lse, void* chave);
 
+<<<<<<< HEAD
 
 void imprimir_lse(t_lse* lse);
 
 void destroy_lse(t_lse* lse);
+=======
+>>>>>>> 8860330f1db1416935b00cdbea8e499476a0a9bb
 
+void imprimir_lse(t_lse* lse);
+
+void destroy_lse(t_lse* lse);
+ 
