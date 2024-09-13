@@ -17,6 +17,8 @@ ADD OL6225613W; The Mastery and Uses of Fire in Antiquity; J. E. Rehder; 2000
 ADD OL716850W; Gödel, Escher, Bach; Douglas R. Hofstadter; 1979
 ADD OL17357767W; Algorithms to Live By; Brian Christian; 2016
 CHECK_OUT XX17357767X;
+
+CHECK_OUT OL17357767W;
 CHECK_IN OL17357767W;
 SEARCH OL17606421W;
 SEARCH OL16568759W;

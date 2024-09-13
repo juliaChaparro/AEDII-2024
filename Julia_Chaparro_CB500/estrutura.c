@@ -1,7 +1,8 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "assert.h"
-#include "lse_neutra.h"
+#include "estrutura.h"
+
 
 typedef struct elem_lse t_elemento_lse;
 struct lse{
@@ -17,6 +18,7 @@ struct elem_lse{
     t_elemento_lse* prox;
 };
 
+// cria um novo elemento para uma lista simplesmente encadeada
 t_elemento_lse* criar_elem_lse(void* carga){
     t_elemento_lse* novo = malloc(sizeof(t_elemento_lse));
     assert(novo!=NULL);
@@ -24,7 +26,7 @@ t_elemento_lse* criar_elem_lse(void* carga){
     novo->prox=NULL;
     return novo; 
 }
-
+//cria uma nova lista simplesmente encadeada e inicializa seus campos.
 t_lse* criar_lse( t_imprimir_lse impressora, t_comparar_lse comparador ){
     t_lse* nova = malloc(sizeof(t_lse));
     assert(nova!=NULL);
@@ -36,14 +38,14 @@ t_lse* criar_lse( t_imprimir_lse impressora, t_comparar_lse comparador ){
     
     return nova;
 }
-/// @brief destroy uma lista vazia
-/// @param lse 
+
+//é responsável por destruir uma lista simplesmente encadeada e liberar a memória alocada para essa estrutura
 void destroy_lse(t_lse* lse){
     assert(lse->prim == NULL);
     free(lse);
 }
 
-// ops baseada em posicao
+//insere um novo elemento no início de uma lista simplesmente encadeada 
 void inserir_inicio_lse(t_lse* lse, void* carga){
     t_elemento_lse* novo = criar_elem_lse(carga);
     novo->prox = lse->prim;
@@ -54,6 +56,7 @@ void inserir_inicio_lse(t_lse* lse, void* carga){
     lse->tamanho++;
 }
 
+//nsere um novo elemento no final de uma lista simplesmente encadeada
 void inserir_final_lse(t_lse* lse, void* carga){
     t_elemento_lse* novo = criar_elem_lse(carga);
     if (lse->prim == NULL){
@@ -66,11 +69,13 @@ void inserir_final_lse(t_lse* lse, void* carga){
     lse->tamanho++;
 }
 
+
+//nsere um novo elemento na lista simplesmente encadeada de acordo com um critério de comparação definido pela função comparador
 void inserir_conteudo_lse(t_lse* lse, void* carga){
     t_elemento_lse* novo = criar_elem_lse(carga);
     t_elemento_lse* ant=NULL;
     t_elemento_lse* cam = lse->prim;
-    /// 
+
 
     
     while((cam!=NULL) && (lse->comparador(cam->carga_util, carga) <= 0) ){
@@ -81,7 +86,7 @@ void inserir_conteudo_lse(t_lse* lse, void* carga){
         lse->ult = novo;
         lse->prim = novo;
     }
-    else if (cam == lse->prim){ //inicio da lista 
+    else if (cam == lse->prim){ 
         novo->prox = lse->prim;
         lse->prim = novo;
     }else if(cam == NULL){
@@ -94,7 +99,7 @@ void inserir_conteudo_lse(t_lse* lse, void* carga){
     lse->tamanho++;
 }
 
-
+//remove o primeiro elemento de uma lista simplesmente encadeada e retorna a carga rmazenada nesse elemento
 void* remover_inicio_lse(t_lse* lse){
     assert(lse->ult!= NULL);
     
@@ -111,9 +116,9 @@ void* remover_inicio_lse(t_lse* lse){
 
     return carga;
 }
-/// @brief remover o último elemento da lista
-/// @param lse 
-/// @return carga util armazenada
+
+
+//remove o último elemento de uma lista simplesmente encadeada e retorna a carga armazenada nesse elemento.
 void* remover_final_lse(t_lse* lse){
     assert(lse->prim!=NULL);
     void* carga;
@@ -134,6 +139,7 @@ void* remover_final_lse(t_lse* lse){
     return carga;
 }
 
+//remove um elemento de uma lista simplesmente encadeada com base em uma chave fornecida, que é comparada com a carga útil dos elementos da lista
 void* remover_conteudo_lse(t_lse* lse, void* chave){
     assert(lse->prim!=NULL);
 
@@ -144,7 +150,7 @@ void* remover_conteudo_lse(t_lse* lse, void* chave){
         ant = cam;
         cam = cam->prox;
     }
-    //
+
     if (cam!=NULL){
         if (cam == lse->prim){
             lse->prim = cam->prox;
@@ -164,6 +170,7 @@ void* remover_conteudo_lse(t_lse* lse, void* chave){
     return carga;
 }
 
+//permite acessar o elemento de uma lista simplesmente encadeada em uma posição específica, baseada em um índice fornecido
 void* acessar_lse(t_lse* lse, int pos){
     assert(pos>=1 && pos<=lse->tamanho);
     t_elemento_lse* cam = lse->prim;
@@ -172,10 +179,9 @@ void* acessar_lse(t_lse* lse, int pos){
     }
     return cam->carga_util;
 }
-/// @brief acessar um elemento baseado em um valor
-/// @param lse 
-/// @param carga 
-/// @return 
+
+
+//busca e retorna a carga de um elemento na lista simplesmente encadeada que corresponde a uma chave fornecida
 void* acessar_conteudo_lse(t_lse* lse, void* chave){
     void* carga=NULL;
     t_elemento_lse* cam = lse->prim;
@@ -188,11 +194,11 @@ void* acessar_conteudo_lse(t_lse* lse, void* chave){
     return carga;
 }
 
+//percorre todos os elementos de uma lista simplesmente encadeada e imprime seus conteúdos usando uma função fornecida.
 void imprimir_lse(t_lse* lse){
     t_elemento_lse* cam = lse->prim;
     while (cam!=NULL){
-        printf("%p\n", cam->carga_util);
-        // chamar a função especialista 
+
         lse->impressora(cam->carga_util);
         cam = cam->prox;
     }
@@ -200,38 +206,3 @@ void imprimir_lse(t_lse* lse){
 }
 
 
-// int main(){
-//     t_lse* lse = criar_lse();
-//     inserir_conteudo_lse(lse, 30);
-//     inserir_conteudo_lse(lse, 10);
-//     inserir_conteudo_lse(lse, 15);
-
-//     int carga = acessar_lse(lse, 1);
-//     printf("Acesso: %d\n", carga);
-
-//     carga = acessar_lse(lse, 3);
-//     printf("Acesso: %d\n", carga);
-
-//     carga = remover_conteudo_lse(lse, 30);
-//     printf("remover: %d\n", carga);
-
-
-//     carga = acessar_conteudo_lse(lse, 30);
-//     printf("acessar: %d\n", carga);
-
-//     // carga = acessar_lse(lse, 3);
-//     // printf("Acesso: %d\n", carga);
-
-
-//     // int carga=remover_inicio_lse(lse);
-//     // printf("removido do inicio: %d\n", carga);
-
-//     // carga = remover_final_lse(lse);
-//     // printf("removido do final: %d\n", carga);
-
-//     // inserir_final_lse(lse, 40);
-//     // carga = acessar_lse(lse, 1);
-//     // printf("Acesso: %d\n", carga);
-
-//     destroy_lse(lse);
-// }
