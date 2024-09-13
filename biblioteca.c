@@ -4,6 +4,7 @@
 #include "lse_neutra.h"
 #include "string.h"
 
+
 typedef struct biblioteca
 {
     t_lse *armazem;
@@ -25,9 +26,8 @@ void imprimir_livro(t_livro *l)
     printf(" Codigo: %s\n Nome do Livro: %s\n Nome do autor: %s\n Ano de publicacao:%d\n", l->codigo, l->n_livro, l->n_autor, l->ano);
 }
 
-// provisorio mudar dps
-int comparar_livros(t_livro *l1, t_livro *l2)
-{
+
+int comparar_livros(t_livro *l1, t_livro *l2){
     if (strcmp(l1->codigo, l2->codigo) == 0)
     {
         return 0;
@@ -66,13 +66,14 @@ t_biblioteca *criar_biblioteca()
     return b;
 }
 
-void f_ADD(t_biblioteca *bib, char codigo[], char n_livro[], char n_autor[], int ano)
-{
+void f_ADD(FILE* arq,t_biblioteca *bib, char codigo[], char n_livro[], char n_autor[], int ano){
     t_livro *liv = criar_livro(codigo, n_livro, n_autor, ano);
     inserir_conteudo_lse(bib->armazem, liv);
+    fprintf(arq,"Livro: %s adicionado com sucesso\n",liv->n_livro);
+    
 }
 
-void f_SEARCH(t_biblioteca *bib, char randam[]){
+void f_SEARCH(FILE* arq,t_biblioteca *bib, char randam[]){
 
     t_livro liv;
     strcpy(liv.codigo, randam);
@@ -81,14 +82,14 @@ void f_SEARCH(t_biblioteca *bib, char randam[]){
 
     t_livro *result = acessar_conteudo_lse(bib->armazem, &liv);
     if (result){
-        printf("ACHOOO: %s %s %s %d\n", result->codigo, result->n_livro, result->n_autor, result->ano);
+        fprintf(arq,"\nLivro encontrado com sucesso:\nCodigo: %s\nNome do livro: %s\nNome do autor: %s\nAno de publicacao: %d\n", result->codigo, result->n_livro, result->n_autor, result->ano);
     }else{
-        printf("livro nao encontrado\n");
+        fprintf(arq,"\nLivro nao encontrado na biblioteca\n");
     }
 }
 
 
-void CHECK_OUT(t_biblioteca* bib, char randam[]){
+void CHECK_OUT(FILE* arq,t_biblioteca* bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
     strcpy(liv.n_livro, randam);
@@ -98,9 +99,22 @@ void CHECK_OUT(t_biblioteca* bib, char randam[]){
 
     if(resuslt){
         inserir_conteudo_lse(bib->l_empret,resuslt);
-        printf("livro emprestado\n");
+        fprintf(arq,"\nLivro: %s emprestado\n",resuslt->n_livro);
     }else{
-        printf("livro nao encontrado");
+        fprintf(arq,"\nLivro indisponivel na biblioteca\n");
+    }
+}
+
+void CHECK_IN(FILE* arq,t_biblioteca* bib, char randam[]){
+    t_livro liv;
+    strcpy(liv.codigo, randam);
+    strcpy(liv.n_livro, randam);
+    strcpy(liv.n_autor, randam);
+    t_livro* result = acessar_conteudo_lse(bib->l_empret,&liv);
+    if (result){
+        remover_conteudo_lse(bib->l_empret,result);
+        inserir_conteudo_lse(bib->armazem,result);
+        fprintf(arq,"\nLivro: %s devolvido para a biblioteca\n",result->n_livro);
     }
 }
 
@@ -108,58 +122,51 @@ t_biblioteca *abrir_biblioteca(char nome_arq[]){
     t_biblioteca *bib;
 
     bib = criar_biblioteca();
+    FILE* arq_saida = fopen("saida.out","w+");
 
     t_livro *liv;
     FILE *arq = fopen(nome_arq, "r");
+
     char comando[50];
     char codigo[50];
     char n_livro[80];
     char n_autor[80];
     int ano;
     char randam[100];
+
     if (arq == NULL){
         printf("Erro no Arquivo.\n");
     }
 
-    while ((fscanf(arq, "%49[^ ]%*c", comando) == 1))
-    {
+    while ((fscanf(arq, " %49[^ ]", comando) == 1)){
 
         if (strcmp(comando, "ADD") == 0){
-            fscanf(arq, "%49[^;]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
-            f_ADD(bib, codigo, n_livro, n_autor, ano);
+            fscanf(arq, " %49[^;]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
+            f_ADD(arq_saida,bib, codigo, n_livro, n_autor, ano);
         }
         else if (strcmp(comando, "SEARCH") == 0){
-            fscanf(arq, "%99[^\n]%*c", randam);
-            f_SEARCH(bib,randam);
+            fscanf(arq, " %99[^;]%*c", randam);
+            f_SEARCH(arq_saida,bib,randam);
         }else if(strcmp(comando,"CHECK_OUT")==0){
-            fscanf(arq, "%99[^\n]%*c", randam);
-            CHECK_OUT(bib,randam);
+            fscanf(arq, " %99[^;]%*c", randam);
+            CHECK_OUT(arq_saida,bib,randam);
         }
         else if(strcmp(comando,"CHECK_IN")==0){
-            fscanf(arq, "%99[^\n]%*c", randam);
-            t_livro liv;
-            strcpy(liv.codigo, randam);
-            strcpy(liv.n_livro, randam);
-            strcpy(liv.n_autor, randam);
-            t_livro* result = acessar_conteudo_lse(bib->l_empret,&liv);
-            if (result){
-                remover_conteudo_lse(bib->l_empret,result);
-                inserir_conteudo_lse(bib->armazem,result);
-                printf("livro devolvido\n");
-            }
+            fscanf(arq, " %99[^;]%*c", randam);
+            CHECK_IN(arq_saida,bib,randam);
         }
     }
-
     fclose(arq);
+    fclose(arq_saida);
     return bib;
 }
 
-int main(int argc, char *argv[])
-{
+
+
+int main(int argc, char *argv[]){
     t_biblioteca *bib;
 
     bib = abrir_biblioteca(argv[1]);
-
     imprimir_lse(bib->armazem);
     imprimir_lse(bib->l_empret);
 }

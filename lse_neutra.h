@@ -18,4 +18,4 @@ void* acessar_conteudo_lse(t_lse* lse, void* chave);
 void imprimir_lse(t_lse* lse);
 
 void destroy_lse(t_lse* lse);
-
+ 
