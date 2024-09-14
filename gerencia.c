@@ -12,7 +12,7 @@ typedef struct biblioteca{
 
 } t_biblioteca;
 
-//Funcao que adiciona na Biblioteca e cria um campo livre
+//Funçao que adiciona na Biblioteca e cria um campo livre
 void f_ADD(FILE* arq,t_biblioteca *bib, char codigo[], char n_livro[], char n_autor[], int ano){
     t_livro *liv = criar_livro(codigo, n_livro, n_autor, ano);
     inserir_conteudo_lse(bib->armazem, liv);
@@ -20,7 +20,7 @@ void f_ADD(FILE* arq,t_biblioteca *bib, char codigo[], char n_livro[], char n_au
     
 }
 
-//fucao de procura pelo autor, nome do livro e codigo do livro
+//FuÇao de procura pelo autor, nome do livro e codigo do livro
 void f_SEARCH(FILE* arq,t_biblioteca *bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
@@ -35,7 +35,7 @@ void f_SEARCH(FILE* arq,t_biblioteca *bib, char randam[]){
     }
 }
 
-//funcao que percorre o campo amazem e coloca na campo de emprestimos 
+//Função que percorre o campo armazen e coloca no campo de empréstimos
 void f_CHECK_OUT(FILE* arq,t_biblioteca* bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
@@ -52,7 +52,7 @@ void f_CHECK_OUT(FILE* arq,t_biblioteca* bib, char randam[]){
     }
 }
 
-//funao que percorre o campo dos livros emprestados e verifica se ele esta no campo e depois ele remove e coloca movamente no campo armazem
+//Função que percorre o campo dos livros emprestados, verifica se o livro está no campo e, depois, remove-o e coloca-o novamente no campo de armazenamento.
 void f_CHECK_IN(FILE* arq,t_biblioteca* bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
@@ -70,7 +70,7 @@ void f_CHECK_IN(FILE* arq,t_biblioteca* bib, char randam[]){
     }
 }
 
-//funcao que vai gerar um campo para cada area 
+//Função que vai gerar um campo para cada área
 t_biblioteca *criar_biblioteca(){
     t_biblioteca *b = malloc(sizeof(t_biblioteca));
     b->armazem = criar_lse(imprimir_livro, comparar_livros);
@@ -78,7 +78,7 @@ t_biblioteca *criar_biblioteca(){
 
     return b;
 }
-//funcao que vai percorrer um arquivo e veriricar se o comando do arquivo e executar  
+//Função que vai percorrer um arquivo, verificar o comando no arquivo e executá-lo  
 t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
     t_biblioteca *bib;
 
@@ -123,9 +123,8 @@ t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
     fclose(arq_saida);
     return bib;
 }
-//funçao main que vai pedir o nome dos arquivos de entrada e saida
+//Função main que pedirá o nome dos arquivos de entrada e saída
 int main(int argc, char *argv[]){
     t_biblioteca *bib;
     bib = abrir_biblioteca(argv[1],argv[2]);
-
 }
