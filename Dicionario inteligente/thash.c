@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
-#include "../../..//Modulo01/src/202402/lse_neutra.h"
+#include "lse_neutra.h"
 #include "thash.h"
 
 
@@ -38,7 +38,7 @@ void destroy_elem_hash(t_elem_hash* e){
 
 
 struct hash{
-    t_imprimir_hash impressora;
+    //t_imprimir_hash impressora;
     t_lse* *vetor;
     int tamanho;
     double fc;
