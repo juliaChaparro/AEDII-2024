@@ -13,7 +13,7 @@ typedef struct biblioteca{
 } t_biblioteca;
 
 //Funçao que adiciona na Biblioteca e cria um campo livre
-void f_ADD(FILE* arq,t_biblioteca *bib, char codigo[], char n_livro[], char n_autor[], int ano){
+void ADD(FILE* arq,t_biblioteca *bib, char codigo[], char n_livro[], char n_autor[], int ano){
     t_livro *liv = criar_livro(codigo, n_livro, n_autor, ano);
     inserir_conteudo_lse(bib->armazem, liv);
     fprintf(arq,"Livro: %s adicionado com sucesso\n",liv->n_livro);
@@ -21,7 +21,7 @@ void f_ADD(FILE* arq,t_biblioteca *bib, char codigo[], char n_livro[], char n_au
 }
 
 //FuÇao de procura pelo autor, nome do livro e codigo do livro
-void f_SEARCH(FILE* arq,t_biblioteca *bib, char randam[]){
+void SEARCH(FILE* arq,t_biblioteca *bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
     strcpy(liv.n_livro, randam);
@@ -36,7 +36,7 @@ void f_SEARCH(FILE* arq,t_biblioteca *bib, char randam[]){
 }
 
 //Função que percorre o campo armazen e coloca no campo de empréstimos
-void f_CHECK_OUT(FILE* arq,t_biblioteca* bib, char randam[]){
+void CHECK_OUT(FILE* arq,t_biblioteca* bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
     strcpy(liv.n_livro, randam);
@@ -53,7 +53,7 @@ void f_CHECK_OUT(FILE* arq,t_biblioteca* bib, char randam[]){
 }
 
 //Função que percorre o campo dos livros emprestados, verifica se o livro está no campo e, depois, remove-o e coloca-o novamente no campo de armazenamento.
-void f_CHECK_IN(FILE* arq,t_biblioteca* bib, char randam[]){
+void CHECK_IN(FILE* arq,t_biblioteca* bib, char randam[]){
     t_livro liv;
     strcpy(liv.codigo, randam);
     strcpy(liv.n_livro, randam);
@@ -103,19 +103,22 @@ t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
 
         if (strcmp(comando, "ADD") == 0){
             fscanf(arq, " %49[^;]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
-            f_ADD(arq_saida,bib, codigo, n_livro, n_autor, ano);
+            ADD(arq_saida,bib, codigo, n_livro, n_autor, ano);
         }
         else if (strcmp(comando, "SEARCH") == 0){
             fscanf(arq, " %99[^;]%*c", randam);
-            f_SEARCH(arq_saida,bib,randam);
+            SEARCH(arq_saida,bib,randam);
         }else if(strcmp(comando,"CHECK_OUT")==0){
             fscanf(arq, " %99[^;]%*c", randam);
-            f_CHECK_OUT(arq_saida,bib,randam);
+            CHECK_OUT(arq_saida,bib,randam);
         }
         else if(strcmp(comando,"CHECK_IN")==0){
             fscanf(arq, " %99[^;]%*c", randam);
-            f_CHECK_IN(arq_saida,bib,randam);
+            CHECK_IN(arq_saida,bib,randam);
         }else if(strcmp(comando,"END")==0){
+            break;
+        }else{
+            fprintf(arq_saida,"Comando nao encontrado\n");
             break;
         }
     }

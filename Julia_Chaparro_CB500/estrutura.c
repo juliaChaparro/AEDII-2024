@@ -56,7 +56,7 @@ void inserir_inicio_lse(t_lse* lse, void* carga){
     lse->tamanho++;
 }
 
-//nsere um novo elemento no final de uma lista simplesmente encadeada
+//insere um novo elemento no final de uma lista simplesmente encadeada
 void inserir_final_lse(t_lse* lse, void* carga){
     t_elemento_lse* novo = criar_elem_lse(carga);
     if (lse->prim == NULL){

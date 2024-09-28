@@ -1,0 +1,14 @@
+ADD OL26412853W; Not Nice; Dr Aziz Gazipura; 2017
+ADD OL19358904W; How Asia Works: Success and Failure in the World's Most Dynamic Region; Joe Studwell; 2013
+ADD OL20006331W; Strange tools; Alva Noë; 2015
+CHECK_OUT OL4466409W;
+CHECK_OUT OL26412853W;
+END;
+CHECK_IN OL26412853W;
+SEARCH Thinking in systems;
+SEARCH OL26412853W;
+CHECK_OUT OL4466409W;
+
+jjjj;
+
+END;

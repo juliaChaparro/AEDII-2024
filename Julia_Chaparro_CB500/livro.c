@@ -6,12 +6,12 @@
 #include "livro.h"
 
 
-//funçao que cai mostra todos os campos do livro
+//Função que mostra todos os campos do livro
 void imprimir_livro(t_livro *l){
     printf(" Codigo: %s\n Nome do Livro: %s\n Nome do autor: %s\n Ano de publicacao:%d\n", l->codigo, l->n_livro, l->n_autor, l->ano);
 }
 
-//funcao que  é usada para comparar dois livros com base em diferentes campos e determinar se são iguais.
+//Função usada para comparar dois livros com base em diferentes campos e determinar se são iguais
 int comparar_livros(t_livro *l1, t_livro *l2){
     if (strcmp(l1->codigo, l2->codigo) == 0){
         return 0;
@@ -27,7 +27,7 @@ int comparar_livros(t_livro *l1, t_livro *l2){
     }
 }
 
-// funcao que vai criar um campo de livro e adicionar dentro dele
+// Função que vai criar um campo de livro e adicionar livros dentro dele
 t_livro *criar_livro(char codigo[], char n_livro[], char n_autor[], int ano){
     t_livro *livro = malloc(sizeof(t_livro));
 
