@@ -134,7 +134,6 @@ t_hash* rehashing(t_hash *atual) {
         }
     }
 
-    // Liberar a memória da tabela antiga
     for (int i = 0; i < atual->tamanho; i++) {
         liberar_lse(atual->vetor[i], destroy_elem_hash);
     }
@@ -150,7 +149,7 @@ void imprimir_hash(t_hash* t){
    int K =  t->tamanho;
    for (int k=0;k<K;k++){
         t_lse* colisoes = t->vetor[k];
-        imprimir_lse(colisoes); // potencial 
+        imprimir_lse(colisoes);  
    }
 }
 

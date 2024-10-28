@@ -2,18 +2,9 @@
 #include "stdlib.h"
 #include "assert.h"
 #include "time.h"
+#include "avl.h"
 
-typedef int(*t_comparar_avl)(void*, void*);
-typedef void(*t_imprimir_avl)(void*);
 
-typedef struct no t_no;
-struct no{
-    void* info;
-    t_no* sae;
-    t_no* sad;
-    t_no* ancestral;
-    int fb;
-};
 
 t_no* criar_no(t_no* ancestral, void* info){
     t_no* novo = malloc(sizeof(t_no));
@@ -25,15 +16,6 @@ t_no* criar_no(t_no* ancestral, void* info){
     return novo;
 }
 
-typedef struct avl t_avl;
-struct avl {
-    t_no* raiz;
-    int tamanho;
-    t_imprimir_avl impressora;
-    t_comparar_avl comparar;
-    int num_comparacoes; 
-    int num_rotacoes; 
-};;
 
 t_avl* criar_avl(t_imprimir_avl impressora, t_comparar_avl comparar) {
     t_avl* nova = malloc(sizeof(t_avl));
@@ -271,9 +253,6 @@ void destruir_avl(t_avl* avl) {
     avl->raiz = __podar_avl(avl->raiz);
     free(avl);
 }
-
-
-
 
 int get_num_comparacoes_avl(t_avl* avl) {
     return avl->num_comparacoes;
