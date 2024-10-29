@@ -3,6 +3,7 @@
 #include "string.h"
 #include "lse_neutra.h"
 #include "thash.h"
+
 //inconpleto 
 
 typedef struct elem_hash t_elem_hash;
@@ -37,14 +38,8 @@ void destroy_elem_hash(t_elem_hash* e){
 }
 
 
-struct hash {
-    t_lse** vetor;
-    int tamanho;
-    double fc;
-    int num_comparacoes; 
-    int num_colisoes;
 
-};
+
 
 t_hash* criar_hash(double fc) {
     t_hash* nova = malloc(sizeof(t_hash));
