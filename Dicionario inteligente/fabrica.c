@@ -106,7 +106,6 @@ t_sensores* criar_sensores(char Pump_ID[], char Class_ID[], char Temperature[], 
     if(sensores == NULL){
         return NULL;
     }
-
     strcpy(sensores->Class_ID,Class_ID);
     strcpy(sensores->Flow_Rate,Flow_Rate);
     strcpy(sensores->Maintenance_Flag,Maintenance_Flag);
@@ -156,11 +155,6 @@ void* remover_em_todas(t_todas* todas, void* chave){
 
 
 int todas_comparacoes(t_todas* todas){
-
-    //int avl_rotacoes = get_num_rotacoes_avl;
-    //int avl_comparacoes = get_num_comparacoes_avl;
-    //int hash_comparacoes = get_num_comparacoes_hash;
-    //int hash_colisoes = get_num_colisoes_hash;
 
     printf("numero de rotaçoes da AVL: %d",get_num_rotacoes_avl(todas->avl));
     printf("numero de comparaçoes da AVL: %d",get_num_comparacoes_avl(todas->avl));
