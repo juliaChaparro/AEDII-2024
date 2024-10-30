@@ -1,6 +1,16 @@
 typedef int(*t_comparar_avl)(void*, void*);
 typedef void(*t_imprimir_avl)(void*);
 
+
+typedef struct no t_no;
+struct no{
+    void* info;
+    t_no* sae;
+    t_no* sad;
+    t_no* ancestral;
+    int fb;
+};
+
 typedef struct avl t_avl;
 struct avl {
     t_no* raiz;
@@ -11,14 +21,7 @@ struct avl {
     int num_rotacoes; 
 };
 
-typedef struct no t_no;
-struct no{
-    void* info;
-    t_no* sae;
-    t_no* sad;
-    t_no* ancestral;
-    int fb;
-};
+
 
 t_no* criar_no(t_no* ancestral, void* info);
 

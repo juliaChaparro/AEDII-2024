@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 #include "assert.h"
 #include "lse_neutra.h"
 #include "thash.h"
@@ -45,6 +46,21 @@ typedef struct {
 }t_todas;
 
 
+typedef struct {
+    
+    char Pump_ID[100];
+    char Class_ID[100];
+    char Temperature[100];
+    char Vibration[100];
+    char Pressure[100];
+    char Flow_Rate[100];
+    char RPM[100];
+    char Operational_Hours[100];
+    char Maintenance_Flag[100]; 
+
+} t_sensores;
+
+
 // Funções de criação
 
 t_equipamentos* criar_equipamento(char modelo, char* fabricante, int data_instalacao, char* historico_de_manutencao) {
@@ -84,20 +100,45 @@ t_sensor* criar_sensor(char tipo, char localizacao, char dados_historicos, char 
 }
 
 
-t_todas* criar_todas(t_todas* todas){
+t_sensores* criar_sensores(char Pump_ID[], char Class_ID[], char Temperature[], char Vibration[], char Pressure[], char Flow_Rate[], char RPM[], char Operational_Hours[], char Maintenance_Flag[]){
+    t_sensores* sensores = malloc(sizeof(t_sensores));
 
-    criar_avl(todas->avl->impressora,todas->avl->comparar);
-    criar_hash(todas->hash->fc); 
+    if(sensores == NULL){
+        return NULL;
+    }
+
+    strcpy(sensores->Class_ID,Class_ID);
+    strcpy(sensores->Flow_Rate,Flow_Rate);
+    strcpy(sensores->Maintenance_Flag,Maintenance_Flag);
+    strcpy(sensores->Operational_Hours,Operational_Hours);
+    strcpy(sensores->RPM, RPM);
+    strcpy(sensores->Pump_ID,Pump_ID);
+    strcpy(sensores->Vibration,Vibration);
+    strcpy(sensores->Temperature,Temperature);
+    strcpy(sensores->Pressure,Pressure);
+
+    return sensores;
+}
+
+
+t_todas* criar_todas(t_imprimir_avl impressora, t_comparar_avl comparar, double fc){
+
+    t_todas* nova = malloc(sizeof(t_todas));
+
+    nova->avl = criar_avl(impressora,comparar);
+
+    nova->hash = criar_hash(fc); 
 
 }
 
 
-void inserir_em_todas(t_todas* todas, void* chave, void* chave_hash){
-
-    inserir_avl(todas->avl,chave);
-    inserir_hash(todas->hash,chave, chave_hash);// dps tenho que ver o NULL // eu troquei para chave_hashs
+void inserir_em_todas(t_todas* todas, int chave, void* carga_hash){
+    
+    inserir_avl(todas->avl,carga_hash);
+    inserir_hash(todas->hash,chave, carga_hash);// dps tenho que ver o NULL // eu troquei para chave_hashs
 
 }
+
 
 void* buscar_em_todas(t_todas* todas, void* chave){
 
@@ -116,14 +157,16 @@ void* remover_em_todas(t_todas* todas, void* chave){
 
 int todas_comparacoes(t_todas* todas){
 
-    int avl_rotacoes = get_num_rotacoes_avl;
-    int avl_comparacoes = get_num_comparacoes_avl;
-    int hash_comparacoes = get_num_comparacoes_hash;
-    int hash_colisoes = get_num_colisoes_hash;
+    //int avl_rotacoes = get_num_rotacoes_avl;
+    //int avl_comparacoes = get_num_comparacoes_avl;
+    //int hash_comparacoes = get_num_comparacoes_hash;
+    //int hash_colisoes = get_num_colisoes_hash;
 
-    printf("numero de rotaçoes da AVL: %d",get_num_rotacoes_avl);
-    printf("numero de comparaçoes da AVL: %d",get_num_comparacoes_avl);
-    printf("numero de comparaçoes da HASH: %d",get_num_comparacoes_hash);
-    printf("numero de colisoes da HASH: %d",get_num_colisoes_hash);
+    printf("numero de rotaçoes da AVL: %d",get_num_rotacoes_avl(todas->avl));
+    printf("numero de comparaçoes da AVL: %d",get_num_comparacoes_avl(todas->avl));
+    printf("numero de comparaçoes da HASH: %d",get_num_comparacoes_hash(todas->hash));
+    printf("numero de colisoes da HASH: %d",get_num_colisoes_hash(todas->hash));
 
 }
+
+

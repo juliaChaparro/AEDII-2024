@@ -2,6 +2,7 @@
     "files.associations": {
         "stdio.h": "c",
         "livro.h": "c",
-        "*.in": "c"
+        "*.in": "c",
+        "lse_neutra.h": "c"
     }
 }

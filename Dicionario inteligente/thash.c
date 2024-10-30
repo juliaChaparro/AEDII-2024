@@ -4,7 +4,7 @@
 #include "lse_neutra.h"
 #include "thash.h"
 
-//inconpleto 
+//inconpleto  / estramanete imcompleto 
 
 typedef struct elem_hash t_elem_hash;
 struct elem_hash{
@@ -129,9 +129,6 @@ t_hash* rehashing(t_hash *atual) {
         }
     }
 
-    for (int i = 0; i < atual->tamanho; i++) {
-        liberar_lse(atual->vetor[i], destroy_elem_hash);
-    }
     free(atual->vetor);
     free(atual);
 
