@@ -27,7 +27,7 @@ typedef struct {
 }t_fabrica;
 
 
-t_sensores* criar_sensores(int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, double Maintenance_Flag){
+t_sensores* criar_sensores(int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, int Maintenance_Flag){
     t_sensores* sensores = malloc(sizeof(t_sensores));
 
     if(sensores == NULL){
@@ -46,8 +46,7 @@ t_sensores* criar_sensores(int Pump_ID, int Class_ID, double Temperature, double
     return sensores;
 }
 
-
-void add( t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, double Maintenance_Flag){
+void add( t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, int Maintenance_Flag){
     t_sensores* sensor = criar_sensores(Pump_ID,Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
     inserir_avl(fabi->avl,sensor);
 
@@ -169,12 +168,56 @@ int comparar_sensores(t_sensores *s1, t_sensores *s2){
 
 }
 
-
 t_fabrica* criar_fabrica(){
     t_fabrica *f = malloc(sizeof(t_fabrica));
 
     f->avl = criar_avl(imprimir_sensores,comparar_sensores);
     f->lse = criar_lse(imprimir_sensores, comparar_sensores);
     f->media= criar_avl(imprimir_avl,comparar_sensores);
-    
+    return f;
+
+}
+
+t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
+    t_fabrica *fabi;
+
+    fabi=criar_fabrica();
+
+    char comando[50];
+    int Pump_ID;
+    int Class_ID;
+    double Temperature;
+    double Vibration;
+    double Pressure;
+    double Flow_Rate;
+    double RPM;
+    double Operational_Hours;
+    int Maintenance_Flag;
+
+    while (scanf(" %49[^ ]", comando) == 1){
+        if(strcmp(comando, "ADD") == 0){
+            scanf("[^ ]%d%*c [^ ]%d%*c [^ ]%f%*c [^ ]%f%*c [^ ]%f%*c [^ ]%f%*c [^ ]%f%*c [^ ]%f%*c [^ ]%d%*c", Pump_ID,Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
+            add(fabi,Pump_ID,Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
+        }
+        else if (strcmp(comando, "SEARCH") == 0){
+            scanf(" %d", Pump_ID);
+            search(fabi,Pump_ID);
+        }
+        else if (strcmp(comando, "REMOVE") == 0){
+            scanf(" %d", Pump_ID);
+            remover(fabi,Pump_ID);
+        }
+        else if (strcmp(comando, "REPORT MEAN") == 0){
+            scanf(" %d", Pump_ID);
+            report_mean(fabi,Pump_ID);
+        }
+        else if (strcmp(comando, "REPORT MIN") == 0){
+            scanf(" %d", Pump_ID);
+            //report_min(fabi,Pump_ID); tenho que fazer essas funçoes 
+        }
+        else if (strcmp(comando, "REPORT MAX") == 0){
+            scanf(" %d", Pump_ID);
+            //report_max(fabi,Pump_ID); tenho que fazer essas funçoes 
+        }
+    }
 }

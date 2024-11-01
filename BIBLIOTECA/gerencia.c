@@ -102,7 +102,7 @@ t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
     while ((fscanf(arq, " %49[^ ]", comando) == 1)){
 
         if (strcmp(comando, "ADD") == 0){
-            fscanf(arq, " %49[^;]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
+            fscanf(arq, " %49[^]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
             ADD(arq_saida,bib, codigo, n_livro, n_autor, ano);
         }
         else if (strcmp(comando, "SEARCH") == 0){
@@ -115,11 +115,11 @@ t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
         else if(strcmp(comando,"CHECK_IN")==0){
             fscanf(arq, " %99[^;]%*c", randam);
             CHECK_IN(arq_saida,bib,randam);
-            
         }else if(strcmp(comando,"END")==0){
             break;
         }else{
             fprintf(arq_saida,"Comando nao encontrado\n");
+
         }
     }
     fclose(arq);
