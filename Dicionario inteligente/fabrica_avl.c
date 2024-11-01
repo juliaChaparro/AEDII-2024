@@ -5,60 +5,59 @@
 #include "lse_neutra.h"
 #include "avl.h"
 
-
-
 typedef struct {
     
-    char Pump_ID[100];
-    char Class_ID[100];
-    char Temperature[100];
-    char Vibration[100];
-    char Pressure[100];
-    char Flow_Rate[100];
-    char RPM[100];
-    char Operational_Hours[100];
-    char Maintenance_Flag[100]; 
+    int Pump_ID;
+    int Class_ID;
+    double Temperature;
+    double Vibration;
+    double Pressure;
+    double Flow_Rate;
+    double RPM;
+    double Operational_Hours;
+    double Maintenance_Flag; 
 
 } t_sensores;
 
 
 typedef struct {
     t_avl* avl;
+    t_lse* lse;
+    t_lse* media[];
 }t_fabrica;
 
 
-
-t_sensores* criar_sensores(char Pump_ID[], char Class_ID[], char Temperature[], char Vibration[], char Pressure[], char Flow_Rate[], char RPM[], char Operational_Hours[], char Maintenance_Flag[]){
+t_sensores* criar_sensores(int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, double Maintenance_Flag){
     t_sensores* sensores = malloc(sizeof(t_sensores));
 
     if(sensores == NULL){
         return NULL;
     }
-    strcpy(sensores->Class_ID,Class_ID);
-    strcpy(sensores->Flow_Rate,Flow_Rate);
-    strcpy(sensores->Maintenance_Flag,Maintenance_Flag);
-    strcpy(sensores->Operational_Hours,Operational_Hours);
-    strcpy(sensores->RPM, RPM);
-    strcpy(sensores->Pump_ID,Pump_ID);
-    strcpy(sensores->Vibration,Vibration);
-    strcpy(sensores->Temperature,Temperature);
-    strcpy(sensores->Pressure,Pressure);
+    sensores->Pump_ID = Pump_ID;
+    sensores->Flow_Rate=Flow_Rate;
+    sensores->Maintenance_Flag= Maintenance_Flag;
+    sensores->Operational_Hours=Operational_Hours;
+    sensores->Pressure=Pressure;
+    sensores->RPM=RPM;
+    sensores->Temperature=Temperature;
+    sensores->Vibration=Vibration;
+    sensores->Class_ID=Class_ID;
 
     return sensores;
 }
 
 
-void add( t_fabrica* fabi,char Pump_ID[], char Class_ID[], char Temperature[], char Vibration[], char Pressure[], char Flow_Rate[], char RPM[], char Operational_Hours[], char Maintenance_Flag[]){
+void add( t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, double Maintenance_Flag){
     t_sensores* sensor = criar_sensores(Pump_ID,Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
     inserir_avl(fabi->avl,sensor);
 
 }
 
-void search(t_fabrica* fabi, char chave[]){
-    t_sensores sensor;
-    strcpy(sensor.Pump_ID,chave);
+void search(t_fabrica* fabi, int chave){
+   t_sensores sensor;
+    sensor.Pump_ID = chave;
 
-    t_sensores* result = acessar_conteudo_lse(fabi->avl,&sensor);
+    t_sensores* result = acessar_conteudo_lse(fabi->lse,&sensor);
     if(result){
         printf("achou\n");
     }
@@ -67,11 +66,11 @@ void search(t_fabrica* fabi, char chave[]){
     }
 }
 
-void remover(t_fabrica* fabi, char chave){
+void remover(t_fabrica* fabi, int chave){
     t_sensores sensor;
-    strcpy(sensor.Pump_ID,chave);
+    sensor.Pump_ID = chave;
 
-    t_sensores* result = acessar_conteudo_lse(fabi->avl,&sensor);
+    t_sensores* result = acessar_conteudo_lse(fabi->lse,&sensor);
     if(result){
         remover_avl(fabi->avl,&sensor);
         printf("removeu\n");
@@ -81,5 +80,55 @@ void remover(t_fabrica* fabi, char chave){
     }
 
 }
+
+void report_mean(t_fabrica* fabi, int chave){
+    t_sensores sensor;
+    sensor.Pump_ID = chave;
+
+    t_sensores* result = acessar_conteudo_lse(fabi->lse,&sensor);
+    double *media1 =malloc(sizeof(double));
+    
+    if(result){
+        inserir_conteudo_lse(fabi->media,media1);
+        *media1 = (sensor.Temperature + sensor.Vibration + sensor.Pressure)/3;// ver dps 
+        printf("A media é: %0.3f",*media1);
+    }
+
+}
+
+/*
+void report_min(t_fabrica* fabi, int chave) {
+    t_sensores sensor;
+    sensor.Pump_ID = chave;
+
+
+    int menor = fabi->media; 
+
+    int* ptr = fabi->media;
+    while (ptr != NULL) {
+        if (*ptr < menor) {
+            menor = *ptr;
+        }
+        ptr++; 
+    }
+
+    printf("O menor valor é: %d\n", menor);
+}
+
+# define MAX 100000;
+
+void report_max(t_fabrica* fabi, int chave) {
+    t_sensores sensor;
+    sensor.Pump_ID = chave;
+
+    int maior = fabi->media[0];  
+    for (int i = 1; i < MAX; i++) {
+        if (fabi->media[i] > maior) {
+            maior = fabi->media[i];
+        }
+    }
+    printf("O maior valor é: %d\n", maior);
+}
+*/
 
 

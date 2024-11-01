@@ -115,11 +115,11 @@ t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
         else if(strcmp(comando,"CHECK_IN")==0){
             fscanf(arq, " %99[^;]%*c", randam);
             CHECK_IN(arq_saida,bib,randam);
+            
         }else if(strcmp(comando,"END")==0){
             break;
         }else{
             fprintf(arq_saida,"Comando nao encontrado\n");
-            break;
         }
     }
     fclose(arq);

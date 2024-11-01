@@ -11,6 +11,7 @@ struct lse{
     int tamanho;
     t_imprimir_lse impressora;
     t_comparar_lse comparador;
+    double media;
 };
 
 struct elem_lse{
@@ -34,6 +35,7 @@ t_lse* criar_lse( t_imprimir_lse impressora, t_comparar_lse comparador ){
     nova->tamanho =0;
     nova->impressora = impressora;
     nova->comparador = comparador;
+    nova->media = 0.0;
 
     return nova;
 }
