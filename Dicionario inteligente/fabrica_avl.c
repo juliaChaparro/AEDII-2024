@@ -23,7 +23,7 @@ typedef struct {
 typedef struct {
     t_avl* avl;
     t_lse* lse;
-    t_lse* media[];
+    t_lse* media;
 }t_fabrica;
 
 
@@ -131,4 +131,50 @@ void report_max(t_fabrica* fabi, int chave) {
 }
 */
 
+void imprimir_sensores(t_sensores* senso){
+    printf("Pump_ID: %d\n Class_ID: %d\n Temperature: %.4f\n Vibration: %.4f\n Pressure: %.4f\n Flow_Rate: %.4f\n RPM: %.4f\n Operational_Hours: %.4f\n Maintenance_Flag: %.4f\n",senso->Pump_ID, senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);
+}
 
+int comparar_sensores(t_sensores *s1, t_sensores *s2){
+    if(s1->Pump_ID == s2->Pump_ID){
+        return 0;
+    }
+    else if(s1->Class_ID == s2->Class_ID){
+        return 0;
+    }
+    else if(s1-> Temperature== s2->Temperature){
+        return 0;
+    }
+    else if(s1->Vibration == s2->Vibration){
+        return 0;
+    }
+    else if(s1->Pressure == s2->Pressure){
+        return 0;
+    }
+    else if(s1->Flow_Rate == s2->Flow_Rate){
+        return 0;
+    }
+    else if(s1->RPM == s2->RPM){
+        return 0;
+    }
+    else if(s1->Operational_Hours == s2->Operational_Hours){
+        return 0;
+    }
+    else if(s1->Maintenance_Flag == s2->Maintenance_Flag){
+        return 0;
+    }
+    else{
+        return 1;
+    }
+
+}
+
+
+t_fabrica* criar_fabrica(){
+    t_fabrica *f = malloc(sizeof(t_fabrica));
+
+    f->avl = criar_avl(imprimir_sensores,comparar_sensores);
+    f->lse = criar_lse(imprimir_sensores, comparar_sensores);
+    f->media= criar_avl(imprimir_avl,comparar_sensores);
+    
+}
