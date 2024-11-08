@@ -19,13 +19,12 @@ t_no* criar_no(t_no* ancestral, void* info){
 
 t_avl* criar_avl(t_imprimir_avl impressora, t_comparar_avl comparar) {
     t_avl* nova = malloc(sizeof(t_avl));
+    
     nova->raiz = NULL;
-
     nova->tamanho = 0;
     nova->impressora = impressora;
     nova->comparar = comparar;
     nova->num_comparacoes = 0;
-    
     nova->num_rotacoes = 0;
 
     return nova;

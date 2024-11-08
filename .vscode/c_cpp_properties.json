@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "Fabrica (AVL)",
+            "compileCommands": ".vscode/compile_commands.json",
+            "compilerPath": "/bin/gcc",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "c17",
+            "cppStandard": "c++98",
+        }
+    ],
+    "version": 4
+}

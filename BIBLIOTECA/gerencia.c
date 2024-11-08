@@ -102,7 +102,7 @@ t_biblioteca *abrir_biblioteca(char nome_entrada[], char nome_saida[]){
     while ((fscanf(arq, " %49[^ ]", comando) == 1)){
 
         if (strcmp(comando, "ADD") == 0){
-            fscanf(arq, " %49[^]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
+            fscanf(arq, " %49[^ ]%*c %79[^;]%*c %79[^;]%*c %d%*c", codigo, n_livro, n_autor, &ano);
             ADD(arq_saida,bib, codigo, n_livro, n_autor, ano);
         }
         else if (strcmp(comando, "SEARCH") == 0){
