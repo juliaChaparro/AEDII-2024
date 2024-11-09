@@ -13,6 +13,7 @@
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
+            "preLaunchTask": "C/C++: gcc build active file",
             "externalConsole": false,
             "MIMode": "gdb",
             "setupCommands": [

@@ -14,7 +14,7 @@ void* acessar_conteudo_lse(t_lse* lse, void* chave);
 
 void* acessar_inicio_lse(t_lse* lse);//funcoes novas 
 void* proximo_elem_lse(t_lse* lse, void* elem);//funcoes novas
-
+int tamanho_lse(t_lse* lse);//funcoes novas
 
 void imprimir_lse(t_lse* lse);
 void destroy_lse(t_lse* lse);

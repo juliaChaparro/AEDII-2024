@@ -221,3 +221,6 @@ void imprimir_lse(t_lse* lse){
     
 }
 
+int tamanho_lse(t_lse* lse){
+    return  lse->tamanho;
+}
