@@ -12,7 +12,6 @@ struct no{
     int fb;
 };
 
-
 t_no* criar_no(t_no* ancestral, void* info){
     t_no* novo = malloc(sizeof(t_no));
     novo->info = info;

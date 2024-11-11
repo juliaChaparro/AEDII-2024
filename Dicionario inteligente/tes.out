@@ -1,54 +1,49 @@
-Adicionado com sucesso
-Novo item adicionado
-A media da Temperature: 134.833624
-A media da Vibration: 2.069166
-A media da Pressure: 138.047499
-Maior Temperature: 149.269375
-Maior Vibration: 2.771923
-Maior Pressure: 174.399175
-Menor Temperature: 120.397872
-Menor Vibration: 1.366409
-Menor Pressure: 101.695823
+Adicionado com sucesso: 51
+Novo item adicionado: 51
 
-Pump_ID: 54
-Class_ID: 4
-Temperature: 120.3979
-Vibration: 2.7719
-Pressure: 101.6958
-Flow_Rate: 13.9798
-RPM: 2233.7388
-Operational_Hours: 3982.2902
+Pump_ID: 51
+Class_ID: 3
+Temperature: 52.3848
+Vibration: 3.4666
+Pressure: 271.5880
+Flow_Rate: 5.8845
+RPM: 1324.7819
+Operational_Hours: 3346.7672
 Maintenance_Flag: 1
 
-Pump_ID: 54
-Class_ID: 2
-Temperature: 149.2694
-Vibration: 1.3664
-Pressure: 174.3992
-Flow_Rate: 10.5646
-RPM: 1456.5090
-Operational_Hours: 2619.0098
+Pump_ID: 51
+Class_ID: 3
+Temperature: 101.4935
+Vibration: 0.8985
+Pressure: 221.0969
+Flow_Rate: 4.2633
+RPM: 1135.3903
+Operational_Hours: 4889.0964
 Maintenance_Flag: 0
 
 Foi removido o(s) item abaixo:
-Pump_ID: 54
-Class_ID: 4
-Temperature: 120.3979
-Vibration: 2.7719
-Pressure: 101.6958
-Flow_Rate: 13.9798
-RPM: 2233.7388
-Operational_Hours: 3982.2902
+Pump_ID: 51
+Class_ID: 3
+Temperature: 52.3848
+Vibration: 3.4666
+Pressure: 271.5880
+Flow_Rate: 5.8845
+RPM: 1324.7819
+Operational_Hours: 3346.7672
 Maintenance_Flag: 1
 
-Pump_ID: 54
-Class_ID: 2
-Temperature: 149.2694
-Vibration: 1.3664
-Pressure: 174.3992
-Flow_Rate: 10.5646
-RPM: 1456.5090
-Operational_Hours: 2619.0098
+Pump_ID: 51
+Class_ID: 3
+Temperature: 101.4935
+Vibration: 0.8985
+Pressure: 221.0969
+Flow_Rate: 4.2633
+RPM: 1135.3903
+Operational_Hours: 4889.0964
 Maintenance_Flag: 0
 
-Não foi encontrado
+Não foi encontrado: 51
+
+Numeros de colisoes da HASH: 0
+
+Numeros de comparações da HASH: 5

@@ -68,16 +68,27 @@ int funcao_hashing(t_hash* t, int chave){
 }
 
 
-int calcular_fc(t_hash* hash){
-    return hash->inseridos % hash->tamanho;
+double calcular_fc(t_hash* hash){
+    return (double) hash->inseridos / (double) hash->tamanho;
 }
 
 
 void inserir_hash(t_hash* t, int chave, void* carga){
+    double cal = calcular_fc(t);
+    if(cal >= t->fc){
+        rehashing(t);
+    }
+    
     int pos = funcao_hashing(t, chave);
-
     t_lse* colisoes = t->vetor[pos];
+
+    int tam = tamanho_lse(colisoes);
+    if(tam != 0){
+        t->num_colisoes++;
+    }
+
     t_elem_hash* novo = criar_elem_hash(chave, carga);
+    
     inserir_inicio_lse(colisoes, novo );
     t->inseridos++;
 }
@@ -87,6 +98,7 @@ void* buscar_hash(t_hash* t, int chave){
 
     t_lse* colisoes = t->vetor[pos];
     t_elem_hash* e = acessar_conteudo_lse(colisoes, &chave);
+    t->num_comparacoes++;
     if (e!=NULL)
         return e->carga;
     else
@@ -108,34 +120,36 @@ void* remover_hash(t_hash* t, int chave){
     t->inseridos--;
 }
 
-t_hash* rehashing(t_hash *atual) {
+
+void rehashing(t_hash *atual) {
     int novoTamanho = atual->tamanho * 2;
-    
-    t_hash* nova = malloc(sizeof(t_hash));
-    nova->fc = atual->fc;
-    nova->tamanho = novoTamanho;
-    nova->vetor = malloc(sizeof(t_lse*) * novoTamanho);
+    t_hash nova;
+    nova.fc = atual->fc;
+    nova.tamanho = novoTamanho;
+    nova.vetor = malloc(sizeof(t_lse*) * novoTamanho);
+    nova.num_colisoes = atual->num_colisoes;
+    nova.num_comparacoes= atual->num_comparacoes;
+    nova.inseridos= atual->inseridos;
 
     for (int i = 0; i < novoTamanho; i++) {
-        nova->vetor[i] = criar_lse(imprimir_elem_hash, comparar_elem_hash);
+        nova.vetor[i] = criar_lse(imprimir_elem_hash, comparar_elem_hash);
     }
 
     for (int i = 0; i < atual->tamanho; i++) {
         t_lse* lista = atual->vetor[i];
-        t_elem_hash* elem = acessar_inicio_lse(lista);
-        
-        while (elem != NULL) {
-            int novaPos = funcao_hashing(nova, elem->chave);
-            inserir_inicio_lse(nova->vetor[novaPos], criar_elem_hash(elem->chave, elem->carga));
-            elem = proximo_elem_lse(lista, elem);
+        int tam = tamanho_lse(lista);
+        for(int j=1;j<=tam;j++){
+            t_elem_hash* elem0 = remover_inicio_lse(lista);
+            int novaPos = funcao_hashing(&nova,elem0->chave);
+            inserir_inicio_lse(nova.vetor[novaPos],elem0);
         }
+        destroy_lse(lista);
     }
 
     free(atual->vetor);
-    free(atual);
-
-    return nova;
+    *atual = nova;
 }
+
 
 void usar_rehashing(t_hash* hash){
     int cal = calcular_fc(hash);

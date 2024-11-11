@@ -114,12 +114,12 @@ void add(FILE* arq,t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature
 
     if(result){
         inserir_conteudo_lse(result->lse,sensor);
-        fprintf(arq,"Novas informações adionadas: %d\n",chave);
+        fprintf(arq,"Novas informações adionadas: %d\n",Pump_ID);
     }else{
         t_bomba* bomba = criar_bomba(Pump_ID);
         inserir_avl(fabi->avl,bomba);
         inserir_conteudo_lse(bomba->lse,sensor);
-        fprintf(arq,"Adionada com sucesso: %d\n",chave);
+        fprintf(arq,"Adionada com sucesso: %d\n",Pump_ID);
     }
 }
 
@@ -136,11 +136,11 @@ void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
         for(int i=1;i<=tam;i++){
             senso= acessar_lse(result->lse,i);
             fprintf(arq,"\nPump_ID: %d\n",Pump_ID);
-            fprintf(arq,"Class_ID: %d\nTemperature: %.4f\nVibration: %.4f\nPressure: %.4f\nFlow_Rate: %.4f\nRPM: %.4f\nOperational_Hours: %.4f\nMaintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);           
+            fprintf(arq,"Class_ID: %0.4d\nTemperature: %.4f\nVibration: %.4f\nPressure: %.4f\nFlow_Rate: %.4f\nRPM: %.4f\nOperational_Hours: %.4f\nMaintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);           
         }
         
     }else{
-        fprintf(arq, "\nNão foi emcontrado: %d\n",ID);
+        fprintf(arq, "\nNão foi emcontrado: %d\n",Pump_ID);
     }
 }
 
@@ -168,7 +168,7 @@ void remover(FILE* arq,t_fabrica* fabi, int chave){
         destroy_lse(result->lse);
         remover_avl(fabi->avl,&bom);
     }else{
-        fprintf(arq,"%d ID não  encontrado\n",bom);
+        fprintf(arq,"%d ID não  encontrado\n",chave);
     }
 }
 
@@ -183,9 +183,9 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
     
     t_bomba* result = buscar_avl(fabi->avl,&bom);
     
-    int tam = tamanho_lse(result->lse);
 
     if(result){
+        int tam = tamanho_lse(result->lse);
         for(int i = 1;i<=tam;i++){
             senso =  acessar_lse(result->lse,i);
             somador_pressure += senso->Pressure;
@@ -193,12 +193,12 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
             somador_Vibration += senso->Vibration;
         }
         
-        fprintf(arq,"\nID: %d\n",bom);
+        fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"A media da Temperature: %lf\n",somador_Temperature/tam);
         fprintf(arq,"A media da Vibration: %lf\n",somador_Vibration/tam);
         fprintf(arq,"A media da Pressure: %lf\n",somador_pressure/tam);
     }else{
-        fprintf(arq, "Media nao encontrada\n");
+        fprintf(arq, "Media nao encontrada: %d\n",chave);
     }
 
 }
@@ -213,8 +213,8 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
 
     
     t_bomba* result= buscar_avl(fabi->avl,&chave);
-    int tam = tamanho_lse(result->lse);
     if(result){
+        int tam = tamanho_lse(result->lse);
         for(int i=1;i<=tam;i++){
             senso = acessar_lse(result->lse,i);
             if(i == 1){
@@ -233,13 +233,13 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
             }
 
         }
-        fprintf(arq,"\nID: %d\n",bom);
+        fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"Maior Temperature: %lf\n",maior_Temperature);
         fprintf(arq,"Maior Vibration: %lf\n",maior_Vibration);
         fprintf(arq,"Maior Pressure: %lf\n",maior_pressure);
     }
     else{
-        fprintf(arq,"nao encontrou o id\n");
+        fprintf(arq,"nao encontrou o ID: %d\n",chave);
     }
 
 }
@@ -254,8 +254,9 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
 
     
     t_bomba* result= buscar_avl(fabi->avl,&chave);
-    int tam = tamanho_lse(result->lse);
+    
     if(result){
+        int tam = tamanho_lse(result->lse);
         for(int i=1;i<=tam;i++){
             senso = acessar_lse(result->lse,i);
             if(i == 1){
@@ -275,13 +276,13 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
 
         }
 
-        fprintf(arq,"\nID: %d\n",bom);
+        fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"Menor Temperature: %lf\n",menor_Temperature);
         fprintf(arq,"Menor Vibration: %lf\n",menor_Vibration);
         fprintf(arq,"Menor Pressure: %lf\n",menor_pressure);
     }
     else{
-        fprintf(arq,"Não encontrou o id\n");
+        fprintf(arq,"Não encontrou o ID: %d\n",chave);
     }
 
 }
@@ -364,6 +365,10 @@ t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
             fprintf(arq_saida,"acabou\n");
         }
     }
+
+    fprintf(arq_saida,"\nNumeros de comparaçoes da AVL: %d\n",get_num_comparacoes_avl(fabi->avl));
+    fprintf(arq_saida,"\nNumeros de rotações da AVL: %d\n",get_num_rotacoes_avl(fabi->avl));
+    
     fclose(arq);
     fclose(arq_saida);
     return fabi;

@@ -111,17 +111,16 @@ void add(FILE* arq,t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature
 
     if(result){
         inserir_conteudo_lse(result->lse,sensor);
-        fprintf(arq,"Novo item adicionado\n");
+        fprintf(arq,"Novo item adicionado: %d\n",Pump_ID);
     }else{
         t_bomba* bomba = criar_bomba(Pump_ID);
 
         inserir_hash(fabi->hash,chave,bomba);
 
         inserir_conteudo_lse(bomba->lse,sensor);
-        fprintf(arq,"Adicionado com sucesso\n");
+        fprintf(arq,"Adicionado com sucesso: %d\n",Pump_ID);
     }
 }
-
 
 void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
 
@@ -136,10 +135,9 @@ void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
             fprintf(arq,"Class_ID: %d\nTemperature: %.4f\nVibration: %.4f\nPressure: %.4f\nFlow_Rate: %.4f\nRPM: %.4f\nOperational_Hours: %.4f\nMaintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);           
         }
     }else{
-        fprintf(arq, "\nNão foi encontrado\n");
+        fprintf(arq, "\nNão foi encontrado: %d\n",Pump_ID);
     }
 }
-
 
 void remover(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
@@ -168,7 +166,6 @@ void remover(FILE* arq,t_fabrica* fabi, int chave){
     }
 }
 
-
 void report_mean(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
     t_sensores* senso;
@@ -189,6 +186,8 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
             somador_Temperature += senso->Temperature;
             somador_Vibration += senso->Vibration;
         }
+
+        fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"A media da Temperature: %lf\n",somador_Temperature/tam);
         fprintf(arq,"A media da Vibration: %lf\n",somador_Vibration/tam);
         fprintf(arq,"A media da Pressure: %lf\n",somador_pressure/tam);
@@ -229,6 +228,7 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
             }
 
         }
+        fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"Maior Temperature: %lf\n",maior_Temperature);
         fprintf(arq,"Maior Vibration: %lf\n",maior_Vibration);
         fprintf(arq,"Maior Pressure: %lf\n",maior_pressure);
@@ -269,20 +269,21 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
                 }
 
         }
+
+        fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"Menor Temperature: %lf\n",menor_Temperature);
         fprintf(arq,"Menor Vibration: %lf\n",menor_Vibration);
         fprintf(arq,"Menor Pressure: %lf\n",menor_pressure);
     }
     else{
-        fprintf(arq,"nao encontrou o id\n");
+        fprintf(arq,"nao encontrou o ID: %d\n",chave);
     }
 }
-
 
 t_fabrica* criar_fabrica(){
     t_fabrica* fabi = malloc(sizeof(t_fabrica));
     
-    fabi->hash= criar_hash(0);
+    fabi->hash= criar_hash(0.7);
     return fabi;
 
 }
@@ -357,6 +358,10 @@ t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
             fprintf(arq_saida,"acabou\n");
         }
     }
+
+    fprintf(arq_saida,"\nNumeros de colisoes da HASH: %d\n",get_num_colisoes_hash(fabi->hash));
+    fprintf(arq_saida,"\nNumeros de comparações da HASH: %d\n",get_num_comparacoes_hash(fabi->hash));
+    
     fclose(arq);
     fclose(arq_saida);
     return fabi;
@@ -366,5 +371,3 @@ int main(int argc, char *argv[]){
     t_fabrica *fabi;
     fabi = abrir_fabrica(argv[1],argv[2]);
 }
-
-
