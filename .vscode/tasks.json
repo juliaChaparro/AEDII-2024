@@ -7,8 +7,9 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${fileDirname}/fabrica_avl.c",
+                "${file}",
                 "${fileDirname}/avl.c",
+                "${fileDirname}/thash.c",
                 "${fileDirname}/lse_neutra.c",
                 "-o",
                 "${fileDirname}/fabrica"

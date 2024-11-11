@@ -1,14 +1,5 @@
 typedef struct hash t_hash;
 
-struct hash {
-    t_lse** vetor;
-    int tamanho;
-    double fc;
-    int num_comparacoes; 
-    int num_colisoes;
-
-};
-
 t_hash* criar_hash(double fc);
 
 int funcao_hashing(t_hash* t, int chave);

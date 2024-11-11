@@ -4,5 +4,6 @@
         "livro.h": "c",
         "*.in": "c",
         "lse_neutra.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

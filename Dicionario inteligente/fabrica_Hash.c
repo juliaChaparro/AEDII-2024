@@ -3,7 +3,7 @@
 #include "string.h"
 #include "assert.h"
 #include "lse_neutra.h"
-#include "avl.h"
+#include "thash.h"
 
 typedef struct {
 
@@ -19,14 +19,13 @@ typedef struct {
 } t_sensores;
 
 typedef struct{
-
     int Pump_ID;
     t_lse* lse;
 
 }t_bomba;
 
-typedef struct {
-    t_avl* avl;
+typedef struct{
+    t_hash* hash;
 }t_fabrica;
 
 void imprimir_bomba(t_bomba* bom){ 
@@ -106,28 +105,27 @@ t_bomba* criar_bomba(int ID){
 
 void add(FILE* arq,t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, int Maintenance_Flag){
     t_sensores* sensor = criar_sensores(Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
-    t_bomba chave;
+    int chave = Pump_ID;
 
-    chave.Pump_ID = Pump_ID;
-
-    t_bomba* result = buscar_avl(fabi->avl,&chave);
+    t_bomba* result = buscar_hash(fabi->hash,chave);
 
     if(result){
         inserir_conteudo_lse(result->lse,sensor);
         fprintf(arq,"achou a bomba\n");
     }else{
         t_bomba* bomba = criar_bomba(Pump_ID);
-        inserir_avl(fabi->avl,bomba);
+
+        inserir_hash(fabi->hash,chave,bomba);
+
         inserir_conteudo_lse(bomba->lse,sensor);
         fprintf(arq,"add com sucesso\n");
     }
 }
 
-void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
-    t_bomba ID;
-    ID.Pump_ID = Pump_ID;
 
-    t_bomba* result = buscar_avl(fabi->avl,&ID);
+void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
+
+    t_bomba* result = buscar_hash(fabi->hash,Pump_ID);
     if(result){
         imprimir_lse(result->lse);
     }else{
@@ -135,11 +133,13 @@ void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
     }
 }
 
+
 void remover(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
 
-    t_bomba* result = buscar_avl(fabi->avl,&bom);
+    t_bomba* result = buscar_hash(fabi->hash,chave);
+
     if(result){
         fprintf(arq,"foi removido\n");
         imprimir_lse(result->lse);
@@ -151,7 +151,7 @@ void remover(FILE* arq,t_fabrica* fabi, int chave){
             tam--;
         }
         destroy_lse(result->lse);
-        remover_avl(fabi->avl,&bom);
+        remover_hash(fabi->hash,chave);
     }else{
         fprintf(arq,"id não  encontrado\n");
     }
@@ -167,8 +167,8 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
     double somador_Temperature = 0;
     double somador_Vibration = 0;
     
-    t_bomba* result = buscar_avl(fabi->avl,&bom);
-    
+    t_bomba* result = buscar_hash(fabi->hash,chave); 
+
     int tam = tamanho_lse(result->lse);
 
     if(result){
@@ -180,7 +180,7 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
         }
         fprintf(arq,"A media da Temperature: %lf\n",somador_Temperature/tam);
         fprintf(arq,"A media da Vibration: %lf\n",somador_Vibration/tam);
-        fprintf(arq,"A media da Pressure: %lf\n\n",somador_pressure/tam);
+        fprintf(arq,"A media da Pressure: %lf\n",somador_pressure/tam);
     }else{
         fprintf(arq, "media nao encontrada\n");
     }
@@ -196,7 +196,8 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
     double maior_Vibration;
 
     
-    t_bomba* result= buscar_avl(fabi->avl,&chave);
+    t_bomba* result = buscar_hash(fabi->hash,chave); 
+
     int tam = tamanho_lse(result->lse);
     if(result){
         for(int i=1;i<=tam;i++){
@@ -206,26 +207,24 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
                 maior_Temperature=senso->Temperature;
                 maior_Vibration =senso->Vibration;
             }
-                if (senso->Pressure > maior_pressure){
-                    maior_pressure = senso->Pressure;
-                }
-                if(senso->Vibration > maior_Vibration){
-                    maior_Vibration = senso->Vibration;
-                }
-                if(senso->Temperature > maior_Temperature){
-                    maior_Temperature = senso->Temperature;
-                }
+            if (senso->Pressure > maior_pressure){
+                maior_pressure = senso->Pressure;
+            }
+            if(senso->Vibration > maior_Vibration){
+                maior_Vibration = senso->Vibration;
+            }
+            if(senso->Temperature > maior_Temperature){
+                maior_Temperature = senso->Temperature;
+            }
 
         }
-
         fprintf(arq,"maior tem Temperature: %lf\n",maior_Temperature);
         fprintf(arq,"maior tem Vibration: %lf\n",maior_Vibration);
-        fprintf(arq,"maior tem Pressure: %lf\n\n",maior_pressure);
+        fprintf(arq,"maior tem Pressure: %lf\n",maior_pressure);
     }
     else{
         fprintf(arq,"nao encontrou o id\n");
     }
-
 }
 
 void report_min(FILE* arq,t_fabrica* fabi,int chave){
@@ -237,7 +236,8 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
     double menor_Vibration;
 
     
-    t_bomba* result= buscar_avl(fabi->avl,&chave);
+    t_bomba* result = buscar_hash(fabi->hash,chave);
+
     int tam = tamanho_lse(result->lse);
     if(result){
         for(int i=1;i<=tam;i++){
@@ -260,20 +260,20 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
         }
         fprintf(arq,"menor tem Temperature: %lf\n",menor_Temperature);
         fprintf(arq,"menor tem Vibration: %lf\n",menor_Vibration);
-        fprintf(arq,"menor tem Pressure: %lf\n\n",menor_pressure);
+        fprintf(arq,"menor tem Pressure: %lf\n",menor_pressure);
     }
     else{
         fprintf(arq,"nao encontrou o id\n");
     }
-
 }
+
 
 t_fabrica* criar_fabrica(){
     t_fabrica* fabi = malloc(sizeof(t_fabrica));
-
-    fabi->avl = criar_avl(imprimir_bomba,comparar_bomba);
-
+    
+    fabi->hash= criar_hash(0);
     return fabi;
+
 }
 
 t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
@@ -355,3 +355,5 @@ int main(int argc, char *argv[]){
     t_fabrica *fabi;
     fabi = abrir_fabrica(argv[1],argv[2]);
 }
+
+

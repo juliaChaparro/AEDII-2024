@@ -139,11 +139,12 @@ void* remover_conteudo_lse(t_lse* lse, void* chave){
     void* carga = NULL;
     t_elemento_lse* ant = NULL;
     t_elemento_lse* cam = lse->prim;
+    
     while((cam!=NULL) && (lse->comparador(cam->carga_util,chave)!=0) ){
         ant = cam;
         cam = cam->prox;
     }
-    //
+
     if (cam!=NULL){
         if (cam == lse->prim){
             lse->prim = cam->prox;

@@ -4,6 +4,13 @@
 #include "time.h"
 #include "avl.h"
 
+struct no{
+    void* info;
+    t_no* sae;
+    t_no* sad;
+    t_no* ancestral;
+    int fb;
+};
 
 
 t_no* criar_no(t_no* ancestral, void* info){
@@ -15,6 +22,15 @@ t_no* criar_no(t_no* ancestral, void* info){
     novo->fb=0;
     return novo;
 }
+
+struct avl {
+    t_no* raiz;
+    int tamanho;
+    t_imprimir_avl impressora;
+    t_comparar_avl comparar;
+    int num_comparacoes; 
+    int num_rotacoes; 
+};
 
 
 t_avl* criar_avl(t_imprimir_avl impressora, t_comparar_avl comparar) {

@@ -4,7 +4,15 @@
 #include "lse_neutra.h"
 #include "thash.h"
 
-//inconpleto  / estramanete imcompleto 
+struct hash {
+    t_lse** vetor;
+    int tamanho;
+    double fc;
+    int num_comparacoes; 
+    int num_colisoes;
+    int inseridos;
+
+};
 
 typedef struct elem_hash t_elem_hash;
 struct elem_hash{
@@ -39,14 +47,13 @@ void destroy_elem_hash(t_elem_hash* e){
 
 
 
-
-
 t_hash* criar_hash(double fc) {
     t_hash* nova = malloc(sizeof(t_hash));
     nova->fc = fc;
     nova->tamanho = 7;
     nova->num_comparacoes = 0;
     nova->num_colisoes = 0;
+    nova->inseridos= 0;
     nova->vetor = malloc(sizeof(t_lse*) * nova->tamanho);
     for (int i = 0; i < nova->tamanho; i++) {
         nova->vetor[i] = criar_lse(imprimir_elem_hash, comparar_elem_hash);
@@ -54,42 +61,36 @@ t_hash* criar_hash(double fc) {
     return nova;
 }
 
-
-
 int funcao_hashing(t_hash* t, int chave){
     int pos = chave % t->tamanho;
 
     return pos;
 }
 
-void inserir_hash(t_hash* t, int chave, void* carga) {
-    int pos = funcao_hashing(t, chave);
-    t_lse* colisoes = t->vetor[pos];
-    t_elem_hash* novo = criar_elem_hash(chave, carga);
 
-    // Count collisions in this slot
-    if (acessar_inicio_lse(colisoes) != NULL) {
-        t->num_colisoes++;
-    }
-
-    inserir_inicio_lse(colisoes, novo);
+int calcular_fc(t_hash* hash){
+    return hash->inseridos % hash->tamanho;
 }
 
 
-void* buscar_hash(t_hash* t, int chave) {
+void inserir_hash(t_hash* t, int chave, void* carga){
     int pos = funcao_hashing(t, chave);
-    t_lse* colisoes = t->vetor[pos];
-    t_elem_hash* elem = acessar_inicio_lse(colisoes);
-    int local_comparacoes = 0;
 
-    while (elem != NULL) {
-        t->num_comparacoes++;
-        local_comparacoes++;
-        if (elem->chave == chave) {
-            return elem->carga;
-        }
-        elem = proximo_elem_lse(colisoes, elem);
-    }
+    t_lse* colisoes = t->vetor[pos];
+    t_elem_hash* novo = criar_elem_hash(chave, carga);
+    inserir_inicio_lse(colisoes, novo );
+    t->inseridos++;
+}
+
+void* buscar_hash(t_hash* t, int chave){
+    int pos = funcao_hashing(t, chave);
+
+    t_lse* colisoes = t->vetor[pos];
+    t_elem_hash* e = acessar_conteudo_lse(colisoes, &chave);
+    if (e!=NULL)
+        return e->carga;
+    else
+        return NULL;
 }
 
 void* remover_hash(t_hash* t, int chave){
@@ -104,6 +105,7 @@ void* remover_hash(t_hash* t, int chave){
         destroy_elem_hash(e); 
     }
     return carga;
+    t->inseridos--;
 }
 
 t_hash* rehashing(t_hash *atual) {
@@ -135,7 +137,16 @@ t_hash* rehashing(t_hash *atual) {
     return nova;
 }
 
+void usar_rehashing(t_hash* hash){
+    int cal = calcular_fc(hash);
 
+    if(cal == 1){
+        rehashing(hash);
+    }
+    else{
+        criar_hash(cal);
+    }
+}
 
 void imprimir_hash(t_hash* t){
    int K =  t->tamanho;
