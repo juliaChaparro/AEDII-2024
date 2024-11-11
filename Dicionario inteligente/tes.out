@@ -1,49 +1,75 @@
-Adicionado com sucesso: 51
-Novo item adicionado: 51
+Adionada com sucesso: 508
+Adionada com sucesso: 507
+Adionada com sucesso: 503
+Novas informações adionadas: 503
+Adionada com sucesso: 53
+Adionada com sucesso: 353
+Adionada com sucesso: 357
+Adionada com sucesso: 656
+Adionada com sucesso: 55
+Adionada com sucesso: 657
+Adionada com sucesso: 210
+Adionada com sucesso: 59
+Adionada com sucesso: 206
+Adionada com sucesso: 651
+Adionada com sucesso: 354
+Adionada com sucesso: 54
+Novas informações adionadas: 206
+Adionada com sucesso: 204
+Adionada com sucesso: 502
 
-Pump_ID: 51
-Class_ID: 3
-Temperature: 52.3848
-Vibration: 3.4666
-Pressure: 271.5880
-Flow_Rate: 5.8845
-RPM: 1324.7819
-Operational_Hours: 3346.7672
+Pump_ID: 354
+Class_ID: 0003
+Temperature: 104.6712
+Vibration: 1.0293
+Pressure: 155.0496
+Flow_Rate: 19.2441
+RPM: 2620.4437
+Operational_Hours: 7792.4136
 Maintenance_Flag: 1
 
-Pump_ID: 51
-Class_ID: 3
-Temperature: 101.4935
-Vibration: 0.8985
-Pressure: 221.0969
-Flow_Rate: 4.2633
-RPM: 1135.3903
-Operational_Hours: 4889.0964
-Maintenance_Flag: 0
+Não foi emcontrado: 197
+
+Não foi emcontrado: 293
+
+Não foi emcontrado: 391
+
+Não foi emcontrado: 582
+
+Não foi emcontrado: 713
+
+ID: 503
+A media da Temperature: 134.666782
+A media da Vibration: 3.372156
+A media da Pressure: 126.041144
+
+ID: 59
+Maior Temperature: 68.344590
+Maior Vibration: 4.576786
+Maior Pressure: 177.784883
+
+ID: 206
+Menor Temperature: 60.364198
+Menor Vibration: 0.783261
+Menor Pressure: 181.199518
 
 Foi removido o(s) item abaixo:
-Pump_ID: 51
+Pump_ID: 357
 Class_ID: 3
-Temperature: 52.3848
-Vibration: 3.4666
-Pressure: 271.5880
-Flow_Rate: 5.8845
-RPM: 1324.7819
-Operational_Hours: 3346.7672
+Temperature: 82.7062
+Vibration: 4.7158
+Pressure: 161.2461
+Flow_Rate: 2.1682
+RPM: 2455.8800
+Operational_Hours: 8810.6727
 Maintenance_Flag: 1
+173 ID não  encontrado
+250 ID não  encontrado
+485 ID não  encontrado
+531 ID não  encontrado
+710 ID não  encontrado
+END
 
-Pump_ID: 51
-Class_ID: 3
-Temperature: 101.4935
-Vibration: 0.8985
-Pressure: 221.0969
-Flow_Rate: 4.2633
-RPM: 1135.3903
-Operational_Hours: 4889.0964
-Maintenance_Flag: 0
+Numeros de comparaçoes da AVL: 119
 
-Não foi encontrado: 51
-
-Numeros de colisoes da HASH: 0
-
-Numeros de comparações da HASH: 5
+Numeros de rotações da AVL: 14
