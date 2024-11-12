@@ -29,19 +29,21 @@ typedef struct {
     t_avl* avl;
 }t_fabrica;
 
+//função permite visualizar rapidamente o identificador da bomba e os itens da lista encadeada que ela contém.
 void imprimir_bomba(t_bomba* bom){ 
     printf("Pump_ID: ",bom->Pump_ID);
     imprimir_lse(bom->lse);
 }
-
+//compara dois items da bomba 
 int comparar_bomba(t_bomba* bomba1,t_bomba* bomba2){
     return bomba1->Pump_ID - bomba2->Pump_ID;
 }
-
+//funçao que da para visualisar o identificador do sensor
 void imprimir_sensores(t_sensores* senso){
     printf("Class_ID: %d\n Temperature: %.4f\n Vibration: %.4f\n Pressure: %.4f\n Flow_Rate: %.4f\n RPM: %.4f\n Operational_Hours: %.4f\n Maintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);
 }
 
+//funçao de compara os items dos sensores
 int comparar_sensores(t_sensores *s1, t_sensores *s2){
     
     if(s1->Class_ID == s2->Class_ID){
@@ -75,6 +77,7 @@ int comparar_sensores(t_sensores *s1, t_sensores *s2){
     }
 }
 
+// criar cada elemento da struct sensores
 t_sensores* criar_sensores(int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, int Maintenance_Flag){
     t_sensores* sensores = malloc(sizeof(t_sensores));
 
@@ -93,6 +96,7 @@ t_sensores* criar_sensores(int Class_ID, double Temperature, double Vibration, d
     return sensores;
 }
 
+//criação de uma nova bomba,
 t_bomba* criar_bomba(int ID){
     t_bomba* bom = malloc(sizeof(t_bomba));
 
@@ -103,7 +107,7 @@ t_bomba* criar_bomba(int ID){
     bom->lse = criar_lse(imprimir_sensores,comparar_sensores);
     return bom;
 }
-
+// vai adicionar os items na avl 
 void add(FILE* arq,t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, int Maintenance_Flag){
     t_sensores* sensor = criar_sensores(Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
     t_bomba chave;
@@ -122,7 +126,7 @@ void add(FILE* arq,t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature
         fprintf(arq,"Adionada com sucesso: %d\n",Pump_ID);
     }
 }
-
+//vai buscar os items na avl
 void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
     t_bomba ID;
     t_sensores* senso;
@@ -144,6 +148,7 @@ void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
     }
 }
 
+//vai remover os items na avl
 void remover(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
@@ -172,6 +177,7 @@ void remover(FILE* arq,t_fabrica* fabi, int chave){
     }
 }
 
+//vai tirar a media dos items que foi procurado
 void report_mean(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
     t_sensores* senso;
@@ -203,6 +209,7 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
 
 }
 
+//vai tirar a maioe dos items que foi procurado
 void report_max(FILE* arq,t_fabrica* fabi,int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
@@ -244,6 +251,7 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
 
 }
 
+//vai tirar a menor dos items que foi procurado
 void report_min(FILE* arq,t_fabrica* fabi,int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
@@ -286,7 +294,7 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
     }
 
 }
-
+//vai criar uma avl para o funcionamento do codigo
 t_fabrica* criar_fabrica(){
     t_fabrica* fabi = malloc(sizeof(t_fabrica));
 
@@ -295,6 +303,7 @@ t_fabrica* criar_fabrica(){
     return fabi;
 }
 
+//vai ler os arquvos de saida e entrada e fazer os tratamentos
 t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
     t_fabrica *fabi;
     fabi=criar_fabrica();
@@ -373,7 +382,7 @@ t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
     fclose(arq_saida);
     return fabi;
 }
-
+//main
 int main(int argc, char *argv[]){
     t_fabrica *fabi;
     fabi = abrir_fabrica(argv[1],argv[2]);

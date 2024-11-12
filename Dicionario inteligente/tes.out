@@ -1,25 +1,25 @@
-Adionada com sucesso: 508
-Adionada com sucesso: 507
-Adionada com sucesso: 503
-Novas informações adionadas: 503
-Adionada com sucesso: 53
-Adionada com sucesso: 353
-Adionada com sucesso: 357
-Adionada com sucesso: 656
-Adionada com sucesso: 55
-Adionada com sucesso: 657
-Adionada com sucesso: 210
-Adionada com sucesso: 59
-Adionada com sucesso: 206
-Adionada com sucesso: 651
-Adionada com sucesso: 354
-Adionada com sucesso: 54
-Novas informações adionadas: 206
-Adionada com sucesso: 204
-Adionada com sucesso: 502
+Adicionado com sucesso: 508
+Adicionado com sucesso: 507
+Adicionado com sucesso: 503
+Novo item adicionado: 503
+Adicionado com sucesso: 53
+Adicionado com sucesso: 353
+Adicionado com sucesso: 357
+Adicionado com sucesso: 656
+Adicionado com sucesso: 55
+Adicionado com sucesso: 657
+Adicionado com sucesso: 210
+Adicionado com sucesso: 59
+Adicionado com sucesso: 206
+Adicionado com sucesso: 651
+Adicionado com sucesso: 354
+Adicionado com sucesso: 54
+Novo item adicionado: 206
+Adicionado com sucesso: 204
+Adicionado com sucesso: 502
 
 Pump_ID: 354
-Class_ID: 0003
+Class_ID: 3
 Temperature: 104.6712
 Vibration: 1.0293
 Pressure: 155.0496
@@ -28,15 +28,15 @@ RPM: 2620.4437
 Operational_Hours: 7792.4136
 Maintenance_Flag: 1
 
-Não foi emcontrado: 197
+Não foi encontrado: 197
 
-Não foi emcontrado: 293
+Não foi encontrado: 293
 
-Não foi emcontrado: 391
+Não foi encontrado: 391
 
-Não foi emcontrado: 582
+Não foi encontrado: 582
 
-Não foi emcontrado: 713
+Não foi encontrado: 713
 
 ID: 503
 A media da Temperature: 134.666782
@@ -63,13 +63,13 @@ Flow_Rate: 2.1682
 RPM: 2455.8800
 Operational_Hours: 8810.6727
 Maintenance_Flag: 1
-173 ID não  encontrado
-250 ID não  encontrado
-485 ID não  encontrado
-531 ID não  encontrado
-710 ID não  encontrado
+ID não  encontrado
+ID não  encontrado
+ID não  encontrado
+ID não  encontrado
+ID não  encontrado
 END
 
-Numeros de comparaçoes da AVL: 119
+Numeros de colisoes da HASH: 6
 
-Numeros de rotações da AVL: 14
+Numeros de comparações da HASH: 34
