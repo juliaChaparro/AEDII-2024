@@ -3,7 +3,7 @@
 #include "string.h"
 #include "assert.h"
 #include "lse_neutra.h"
-#include "thash.h"
+#include "avl.h"
 
 typedef struct {
 
@@ -19,13 +19,14 @@ typedef struct {
 } t_sensores;
 
 typedef struct{
+
     int Pump_ID;
     t_lse* lse;
 
 }t_bomba;
 
-typedef struct{
-    t_hash* hash;
+typedef struct {
+    t_avl* avl;
 }t_fabrica;
 
 //função permite visualizar rapidamente o identificador da bomba e os itens da lista encadeada que ela contém.
@@ -41,6 +42,7 @@ int comparar_bomba(t_bomba* bomba1,t_bomba* bomba2){
 void imprimir_sensores(t_sensores* senso){
     printf("Class_ID: %d\n Temperature: %.4f\n Vibration: %.4f\n Pressure: %.4f\n Flow_Rate: %.4f\n RPM: %.4f\n Operational_Hours: %.4f\n Maintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);
 }
+
 //funçao de compara os items dos sensores
 int comparar_sensores(t_sensores *s1, t_sensores *s2){
     
@@ -105,51 +107,56 @@ t_bomba* criar_bomba(int ID){
     bom->lse = criar_lse(imprimir_sensores,comparar_sensores);
     return bom;
 }
-// vai adicionar os items na hash
+// vai adicionar os items na avl 
 void add(FILE* arq,t_fabrica* fabi,int Pump_ID, int Class_ID, double Temperature, double Vibration, double Pressure, double Flow_Rate, double RPM, double Operational_Hours, int Maintenance_Flag){
     t_sensores* sensor = criar_sensores(Class_ID,Temperature,Vibration,Pressure,Flow_Rate,RPM,Operational_Hours,Maintenance_Flag);
-    int chave = Pump_ID;
+    t_bomba chave;
 
-    t_bomba* result = buscar_hash(fabi->hash,chave);
+    chave.Pump_ID = Pump_ID;
+
+    t_bomba* result = buscar_avl(fabi->avl,&chave);
 
     if(result){
         inserir_conteudo_lse(result->lse,sensor);
-        fprintf(arq,"Novo item adicionado: %d\n",Pump_ID);
+        fprintf(arq,"Novas informações adionadas: %d\n",Pump_ID);
     }else{
         t_bomba* bomba = criar_bomba(Pump_ID);
-
-        inserir_hash(fabi->hash,chave,bomba);
-
+        inserir_avl(fabi->avl,bomba);
         inserir_conteudo_lse(bomba->lse,sensor);
-        fprintf(arq,"Adicionado com sucesso: %d\n",Pump_ID);
+        fprintf(arq,"Adionada com sucesso: %d\n",Pump_ID);
     }
 }
-//vai busca os items na hash
+//vai buscar os items na avl
 void search(FILE* arq,t_fabrica* fabi, int Pump_ID){
-
-    t_bomba* result = buscar_hash(fabi->hash,Pump_ID);
+    t_bomba ID;
     t_sensores* senso;
-    int tam;
+    ID.Pump_ID = Pump_ID;
+
+    t_bomba* result = buscar_avl(fabi->avl,&ID);
+    int tam = 0;
+
     if(result){
         tam = tamanho_lse(result->lse);
         for(int i=1;i<=tam;i++){
             senso= acessar_lse(result->lse,i);
             fprintf(arq,"\nPump_ID: %d\n",Pump_ID);
-            fprintf(arq,"Class_ID: %d\nTemperature: %.4f\nVibration: %.4f\nPressure: %.4f\nFlow_Rate: %.4f\nRPM: %.4f\nOperational_Hours: %.4f\nMaintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);           
+            fprintf(arq,"Class_ID: %0.4d\nTemperature: %.4f\nVibration: %.4f\nPressure: %.4f\nFlow_Rate: %.4f\nRPM: %.4f\nOperational_Hours: %.4f\nMaintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);           
         }
+        
     }else{
-        fprintf(arq, "\nNão foi encontrado: %d\n",Pump_ID);
+        fprintf(arq, "\nNão foi emcontrado: %d\n",Pump_ID);
     }
 }
 
-//vai remover os items na hash
+//vai remover os items na avl
 void remover(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
     t_sensores* senso;
-    t_bomba* result = buscar_hash(fabi->hash,chave);
 
+    t_bomba* result = buscar_avl(fabi->avl,&bom);
     if(result){
+
         fprintf(arq,"\nFoi removido o(s) item abaixo:");
         int tam0 = tamanho_lse(result->lse);
         for(int i=1;i<=tam0;i++){
@@ -157,19 +164,20 @@ void remover(FILE* arq,t_fabrica* fabi, int chave){
             fprintf(arq,"\nPump_ID: %d\n",chave);
             fprintf(arq,"Class_ID: %d\nTemperature: %.4f\nVibration: %.4f\nPressure: %.4f\nFlow_Rate: %.4f\nRPM: %.4f\nOperational_Hours: %.4f\nMaintenance_Flag: %d\n",senso->Class_ID,senso->Temperature,senso->Vibration,senso->Pressure,senso->Flow_Rate,senso->RPM, senso->Operational_Hours,senso->Maintenance_Flag);           
         }
-        int tam = tamanho_lse(result->lse);
-        
+
+        int tam = tamanho_lse(result->lse); 
         while(tam !=0){   
             remover_inicio_lse(result->lse);
             tam--;
         }
         destroy_lse(result->lse);
-        remover_hash(fabi->hash,chave);
+        remover_avl(fabi->avl,&bom);
     }else{
-        fprintf(arq,"ID não  encontrado\n");
+        fprintf(arq,"%d ID não  encontrado\n",chave);
     }
 }
-//vai tirar a media dos items que foi procurado na hash
+
+//vai tirar a media dos items que foi procurado
 void report_mean(FILE* arq,t_fabrica* fabi, int chave){
     t_bomba bom;
     t_sensores* senso;
@@ -179,28 +187,29 @@ void report_mean(FILE* arq,t_fabrica* fabi, int chave){
     double somador_Temperature = 0;
     double somador_Vibration = 0;
     
-    t_bomba* result = buscar_hash(fabi->hash,chave); 
-
-    int tam = tamanho_lse(result->lse);
+    t_bomba* result = buscar_avl(fabi->avl,&bom);
+    
 
     if(result){
+        int tam = tamanho_lse(result->lse);
         for(int i = 1;i<=tam;i++){
             senso =  acessar_lse(result->lse,i);
             somador_pressure += senso->Pressure;
             somador_Temperature += senso->Temperature;
             somador_Vibration += senso->Vibration;
         }
-
+        
         fprintf(arq,"\nID: %d\n",chave);
         fprintf(arq,"A media da Temperature: %lf\n",somador_Temperature/tam);
         fprintf(arq,"A media da Vibration: %lf\n",somador_Vibration/tam);
         fprintf(arq,"A media da Pressure: %lf\n",somador_pressure/tam);
     }else{
-        fprintf(arq, "Media nao encontrada\n");
+        fprintf(arq, "Media nao encontrada: %d\n",chave);
     }
 
 }
-//vai tirar a maior dos items que foi procurado na hash
+
+//vai tirar a maioe dos items que foi procurado
 void report_max(FILE* arq,t_fabrica* fabi,int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
@@ -210,10 +219,9 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
     double maior_Vibration;
 
     
-    t_bomba* result = buscar_hash(fabi->hash,chave); 
-
-    int tam = tamanho_lse(result->lse);
+    t_bomba* result= buscar_avl(fabi->avl,&chave);
     if(result){
+        int tam = tamanho_lse(result->lse);
         for(int i=1;i<=tam;i++){
             senso = acessar_lse(result->lse,i);
             if(i == 1){
@@ -238,10 +246,12 @@ void report_max(FILE* arq,t_fabrica* fabi,int chave){
         fprintf(arq,"Maior Pressure: %lf\n",maior_pressure);
     }
     else{
-        fprintf(arq,"Não encontrou o ID\n");
+        fprintf(arq,"nao encontrou o ID: %d\n",chave);
     }
+
 }
-//vai tirar a menor dos items que foi procurado na hash
+
+//vai tirar a menor dos items que foi procurado
 void report_min(FILE* arq,t_fabrica* fabi,int chave){
     t_bomba bom;
     bom.Pump_ID = chave;
@@ -251,10 +261,10 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
     double menor_Vibration;
 
     
-    t_bomba* result = buscar_hash(fabi->hash,chave);
-
-    int tam = tamanho_lse(result->lse);
+    t_bomba* result= buscar_avl(fabi->avl,&chave);
+    
     if(result){
+        int tam = tamanho_lse(result->lse);
         for(int i=1;i<=tam;i++){
             senso = acessar_lse(result->lse,i);
             if(i == 1){
@@ -280,17 +290,20 @@ void report_min(FILE* arq,t_fabrica* fabi,int chave){
         fprintf(arq,"Menor Pressure: %lf\n",menor_pressure);
     }
     else{
-        fprintf(arq,"nao encontrou o ID: %d\n",chave);
+        fprintf(arq,"Não encontrou o ID: %d\n",chave);
     }
-}
 
+}
+//vai criar uma avl para o funcionamento do codigo
 t_fabrica* criar_fabrica(){
     t_fabrica* fabi = malloc(sizeof(t_fabrica));
-    
-    fabi->hash= criar_hash(0.7);
-    return fabi;
 
+    fabi->avl = criar_avl(imprimir_bomba,comparar_bomba);
+
+    return fabi;
 }
+
+//vai ler os arquvos de saida e entrada e fazer os tratamentos
 t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
     t_fabrica *fabi;
     fabi=criar_fabrica();
@@ -362,14 +375,14 @@ t_fabrica* abrir_fabrica(char nome_entrada[], char nome_saida[]){
         }
     }
 
-    fprintf(arq_saida,"\nNumeros de colisoes da HASH: %d\n",get_num_colisoes_hash(fabi->hash));
-    fprintf(arq_saida,"\nNumeros de comparações da HASH: %d\n",get_num_comparacoes_hash(fabi->hash));
+    fprintf(arq_saida,"\nNumeros de comparaçoes da AVL: %d\n",get_num_comparacoes_avl(fabi->avl));
+    fprintf(arq_saida,"\nNumeros de rotações da AVL: %d\n",get_num_rotacoes_avl(fabi->avl));
     
     fclose(arq);
     fclose(arq_saida);
     return fabi;
 }
-
+//main
 int main(int argc, char *argv[]){
     t_fabrica *fabi;
     fabi = abrir_fabrica(argv[1],argv[2]);
